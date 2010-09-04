@@ -2,7 +2,8 @@ class JpConfig
 	def pools
 		{
 			'test' => {
-				:timeout => 500 # consumers must process entries within 5 minutes
+				:timeout          => 300, # consumers must process entries within 5 minutes
+				:cleanup_interval => 60,  # look for timed-out entries every minute
 			},
 		}
 	end

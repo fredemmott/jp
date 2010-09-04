@@ -1,9 +1,21 @@
 #!/usr/bin/ruby
 require 'jp-config'
 require 'mongo'
+require 'rev'
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
 require 'gen-rb/jp'
+
+class CallbackTimer < Rev::TimerWatcher
+	def initialize interval, &block
+		super interval, true
+		@block = block
+	end
+
+	def on_timer
+		@block.call
+	end
+end
 
 class JpServer
 	def initialize config
@@ -20,15 +32,36 @@ class JpServer
 		@pools = Hash.new
 		config.pools.each do |name, data|
 			data[:timeout] ||= 3600 # Default to 1 hour
+			data[:cleanup_interval] ||= data[:timeout]
 			@pools[name] = data
 		end
 	end
 
 	def serve
 		@start_time = Time.new
+		# Look for expired entries
+		Thread.new do
+			l = Rev::Loop.new
+			@pools.each do |name, data|
+				pool = @database[name]
+				w = CallbackTimer.new data[:cleanup_interval] {
+					pool.update(
+						{
+							'locked_until' => { '$lte' => Time.new.to_i }
+						},
+						{
+							'$set' => { 'locked' => false }
+						},
+						multi: true
+					)
+				}
+				w.attach l
+			end
+			l.run
+		end
 		@server.serve
 	end
-
+	
 	def add pool, message
 		raise NoSuchPool.new unless @pools.member? pool
 
