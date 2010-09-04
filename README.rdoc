@@ -1,0 +1,45 @@
+= Overview
+
+jp (Job Pool) is a producer/consumer job pooling system; I'm calling it a job
+pool rather than a job queue, because it *does not enforce strict ordering*.
+
+A few of the basic principles behind this project:
+* A producer/consumer system
+* Usable easily from multiple languages - it uses Apache Thrift, so can be
+  easily used from C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#,
+  Cocoa, Smalltalk, and OCaml (see http://incubator.apache.org/thrift/ for an
+  up-to-date list)
+* If a consumer starts working on a message in the pool, then crashes,
+  eventually, without human interaction, the message will eventually be given
+  to another consumer - jp uses a lock-work-purge system, with a timeout on the
+  lock
+* All messages must be persistent
+* It's not required that messages are consumed in /exactly/ the order they are
+  added to the pool
+* It must be easy to setup an HA installation
+* It must be horizontally scalable
+
+== Requirements
+
+* Thrift (with Ruby support)
+* mongo rubygem
+* bson rubygem (you probably want bson_ext too for performance)
+* rev rubygem
+* A monodb server/cluster to connect to
+
+== Reasons for out-of-order messages
+
+There are (at least) three ways messages can be consumed out of order:
+
+* A consumer fails to complete processing within a per-pool time limit, so the
+  message is re-queued, and may then be executed after other items that were
+  queued while it was being processed
+* Two items end up being inserted on different mongodb servers, in the same
+  second (then, within that second, the ordering is decided by a byte-by-byte
+  comparison of the mongodb-generated '_id' field)
+* Two consumers are running against the same queue, and one runs somewhat
+  faster than another; depending on what your consumers do, this may lead to
+  out-of-order execution
+
+The first of these is unavoidable if multiple concurrent consumers are allowed
+per pool.

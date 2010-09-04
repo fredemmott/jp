@@ -1,0 +1,39 @@
+digraph G {
+	start -> created
+	created -> in_pool [ label = " added to pool " ]
+	in_pool -> locked [ label = " acquired by consumer " ]
+	locked -> end [ label = " purged (finished) " ]
+	locked -> in_pool [label = " timeout (crashed/failed) "]
+	locked -> unlocked [label = " timeout (slow processing) "]
+	unlocked -> end [label = " purged (finished) "]
+	unlocked -> multiple_consumers [label = " additional consumer acquires "]
+	multiple_consumers -> one_purged[label = " any consumer purges (finishes) "]
+	one_purged -> end[label = " remaining consumers purge/crash/fail " ]
+	multiple_consumers -> unlocked_with_consumers [label = " timeout on active consumer " ]
+	unlocked_with_consumers -> multiple_consumers [label = " additional consumer acquires " ]
+	unlocked_with_consumers -> one_purged [label = " any consumer purges (finishes) "]
+
+	start [
+		label = "START"
+		shape = "diamond"
+	]
+	end [
+		label = "END"
+		shape = "diamond"
+	]
+	created [
+		label = "message created"
+	]
+	in_pool [
+		label = "in job pool"
+	]
+	multiple_consumers [
+		label = "multiple consumers working on same message"
+	]
+	unlocked_with_consumers [
+		label = "unlocked, with multiple consumers"
+	]
+	one_purged [
+		label = "Not in pool, still being processed by some consumers"
+	]
+}
