@@ -28,7 +28,7 @@ digraph G {
 		label = "in job pool"
 	]
 	multiple_consumers [
-		label = "multiple consumers working on same message"
+		label = "multiple consumers working on same message.\lNew 'active' consumer has lock."
 	]
 	unlocked_with_consumers [
 		label = "unlocked, with multiple consumers"
