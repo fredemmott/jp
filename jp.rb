@@ -4,7 +4,7 @@ require 'mongo'
 require 'rev'
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
-require 'gen-rb/jp'
+require File.dirname(__FILE__) + '/gen-rb/jp'
 
 class CallbackTimer < Rev::TimerWatcher
 	def initialize interval, &block
