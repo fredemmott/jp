@@ -69,4 +69,18 @@ module Jp
 			JSON::load message
 		end
 	end
+
+	class ThriftConsumer < AbstractConsumer
+		def initialize queue, base, options = {}, &block
+			super queue, options, &block
+			@base = base
+			@deserializer = Thrift::Deserializer.new
+		end
+		private
+		def translate message
+			struct = @base.new
+			@deserializer.deserialize struct, message
+			struct
+		end
+	end
 end

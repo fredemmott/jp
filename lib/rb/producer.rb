@@ -35,4 +35,15 @@ module Jp
 			JSON::dump message
 		end
 	end
+
+	class ThriftProducer < AbstractProducer
+		def initialize queue, options = {}
+			super queue, options
+			@serializer = Thrift::Serializer.new
+		end
+		private
+		def translate message
+			@serializer.serialize message
+		end
+	end
 end

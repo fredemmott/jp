@@ -9,6 +9,10 @@ class JpConfig
 				:timeout          => 60,
 				:cleanup_interval => 1,
 			},
+			'thrift' => {
+				:timeout          => 60,
+				:cleanup_interval => 1,
+			},
 		}
 	end
 
