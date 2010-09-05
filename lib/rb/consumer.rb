@@ -6,6 +6,7 @@ require 'job_pool'
 require_relative './client.rb'
 
 autoload :Rev, 'rev'
+autoload :JSON, 'json'
 
 module Jp
 	class AbstractConsumer < AbstractClient
@@ -59,6 +60,13 @@ module Jp
 		private
 		def translate message
 			message
+		end
+	end
+
+	class JsonConsumer < AbstractConsumer
+		private
+		def translate message
+			JSON::load message
 		end
 	end
 end

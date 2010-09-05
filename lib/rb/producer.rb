@@ -5,6 +5,8 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/./gen-rb/'
 require 'job_pool'
 require_relative './client.rb'
 
+autoload :JSON, 'json'
+
 module Jp
 	class AbstractProducer < AbstractClient
 		def initialize queue, options = {}
@@ -24,6 +26,13 @@ module Jp
 		private
 		def translate message
 			message
+		end
+	end
+
+	class JsonProducer < AbstractProducer
+		private
+		def translate message
+			JSON::dump message
 		end
 	end
 end
