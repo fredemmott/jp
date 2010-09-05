@@ -36,6 +36,12 @@ supports. At the time of writing, this includes:
 
 Consumers and producers can be written in different languages.
 
+Additionally, as an alternative to using the {Thrift interface}[http://github.com/fredemmott/jp/blob/master/jp.thrift]
+directly, [simplified client libraries]{http://github.com/fredemmott/jp/tree/master/lib/}
+are currently provided for:
+* C++
+* Ruby
+
 == Requirements
 
 * Thrift (with Ruby support)
@@ -117,7 +123,13 @@ per pool.
 
 == Examples
 
-Producer and consumer examples[http://github.com/fredemmott/jp/tree/master/examples/direct/] are included for:
+Producer and consumer {examples using the Thrift API}[http://github.com/fredemmott/jp/tree/master/examples/direct/]
+are available for:
 * C++
 * Java
+* Ruby
+
+Producer and consumer {examples using the simplified libraries}[http://github.com/fredemmott/jp/tree/master/examples/simple/]
+are available for:
+* C++
 * Ruby
