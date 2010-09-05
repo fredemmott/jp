@@ -72,6 +72,9 @@ what serialization format you use - here's a few suggestions that are fairly
 portable between different languages, though you can use any other method you
 like:
 
+* Thrift via memory buffer, and your choice of protocol - the Ruby library
+  provides a Thrift::Serialize class using the memory buffer transport and the
+  binary protocol
 * UTF-8 if it's simple character data
 * UTF-8 JSON[http://www.json.org]
 * XML
