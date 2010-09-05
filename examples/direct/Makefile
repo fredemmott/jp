@@ -1,5 +1,7 @@
 CPP_BINARIES=\
-	TextProducer_cpp
+	TextConsumer_cpp \
+	TextProducer_cpp \
+
 
 all: $(CPP_BINARIES)
 
