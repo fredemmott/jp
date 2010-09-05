@@ -34,8 +34,10 @@ class JpServer
 		config.pools.each do |name, data|
 			data[:timeout] ||= 3600 # Default to 1 hour
 			data[:cleanup_interval] ||= data[:timeout]
+			data[:purged] = Array.new
 			@pools[name] = data
 		end
+
 	end
 
 	def serve
@@ -46,6 +48,10 @@ class JpServer
 			@pools.each do |name, data|
 				pool = @database[name]
 				w = CallbackTimer.new data[:cleanup_interval] {
+					to_purge, data[:purged] = data[:purged], Array.new
+					pool.remove(
+						_id: {'$in' => to_purge.map {|id| BSON::ObjectId(id) } }
+					)
 					pool.update(
 						{
 							'locked_until' => { '$lte' => Time.new.to_i }
@@ -103,7 +109,7 @@ class JpServer
 
 	def purge pool, id
 		raise NoSuchPool.new unless @pools.member? pool
-		@database[pool].remove _id: BSON::ObjectId(id)
+		@pools[pool][:purged].push id
 	end
 end
 
