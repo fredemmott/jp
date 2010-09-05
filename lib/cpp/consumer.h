@@ -131,4 +131,27 @@ namespace jp
 				return message;
 			}
 	};
+
+	template<typename T> class ThriftConsumer : public AbstractConsumer<T>
+	{
+		public:
+			ThriftConsumer(const std::string& pool, Runner<T>* runner, const std::string& hostname = DEFAULT_HOSTNAME, int port = DEFAULT_PORT, int pollInterval = DEFAULT_POLL_INTERVAL)
+			: AbstractConsumer<T>(pool, runner, hostname, port, pollInterval)
+			{
+				shared_ptr<TProtocolFactory> factory(new TBinaryProtocolFactory());
+				m_transport = shared_ptr<TMemoryBuffer>(new TMemoryBuffer());
+				m_protocol = factory->getProtocol(m_transport);
+			}
+		protected:
+			virtual T translate(const std::string& message) const
+			{
+				T out;
+				m_transport->resetBuffer(reinterpret_cast<uint8_t*>(const_cast<char*>(message.data())), message.length());
+				out.read(&*m_protocol);
+				return out;
+			}
+		private:
+			shared_ptr<TMemoryBuffer> m_transport;
+			shared_ptr<TProtocol> m_protocol;
+	};
 }

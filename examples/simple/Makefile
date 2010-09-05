@@ -1,6 +1,7 @@
 CPP_EXECUTABLES=\
 	TextConsumer_cpp \
 	TextProducer_cpp \
+	ThriftConsumer_cpp \
 	ThriftProducer_cpp \
 
 all: $(CPP_EXECUTABLES) #$(JAVA_EXECUTABLES) $(JAVA_CLASSES)
