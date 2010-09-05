@@ -3,25 +3,15 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../../gen-rb/'
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/./gen-rb/'
 require 'job_pool'
+require_relative './client.rb'
 
 autoload :Rev, 'rev'
 
 module Jp
-	class AbstractConsumer
+	class AbstractConsumer < AbstractClient
 		def initialize queue, options = {}, &block
 			raise NotImplementedError.new unless self.class != Jp::AbstractConsumer
-			options[:host] ||= 'localhost'
-			options[:port] ||= 9090
-			options[:poll_interval] ||= 1
-			@queue = queue
-			@options = options
-
-			socket = Thrift::Socket.new options[:host], options[:port]
-			transport = Thrift::BufferedTransport.new socket
-			protocol = Thrift::BinaryProtocol.new transport
-			@client = JobPool::Client.new protocol
-			transport.open
-
+			super queue, options
 			@block = block
 		end
 
@@ -66,6 +56,7 @@ module Jp
 	end
 
 	class TextConsumer < AbstractConsumer
+		private
 		def translate message
 			message
 		end
