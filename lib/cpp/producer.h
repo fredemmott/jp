@@ -3,6 +3,7 @@
 #include <protocol/TBinaryProtocol.h>
 #include <transport/TSocket.h>
 #include <transport/TTransportUtils.h>
+#include <transport/TBufferTransports.h>
 
 using namespace jp;
 
@@ -60,5 +61,31 @@ namespace jp
 			{
 				return message;
 			}
+	};
+
+	template<typename T> class ThriftProducer : public AbstractProducer<T>
+	{
+		public:
+			ThriftProducer(const std::string& pool, const std::string& hostname = DEFAULT_HOSTNAME, int port = DEFAULT_PORT)
+			: AbstractProducer<T>(pool, hostname, port)
+			{
+				shared_ptr<TProtocolFactory> factory(new TBinaryProtocolFactory());
+				m_transport = shared_ptr<TMemoryBuffer>(new TMemoryBuffer());
+				m_protocol = factory->getProtocol(m_transport);
+			}
+		protected:
+			virtual std::string translate(const T& message)
+			{
+				m_transport->resetBuffer();
+				message.write(&*m_protocol);
+				uint32_t len = m_transport->available_read();
+				uint8_t buf[len];
+				m_transport->read(buf, len);
+				std::string out(reinterpret_cast<char*>(buf), len);
+				return out;
+			}
+		private:
+			shared_ptr<TMemoryBuffer> m_transport;
+			shared_ptr<TProtocol> m_protocol;
 	};
 }
