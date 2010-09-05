@@ -1,7 +1,10 @@
 class JpConfig
 	def pools
 		{
-			'text'   => {},
+			'text'   => {
+				:timeout          => 60,
+				:cleanup_interval => 1
+			},
 		}
 	end
 
