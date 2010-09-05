@@ -108,3 +108,16 @@ There are (at least) three ways messages can be consumed out of order:
 
 The first of these is unavoidable if multiple concurrent consumers are allowed
 per pool.
+
+= Getting started
+
+* Setup a {MongoDB server}[http://www.mongodb.org/display/DOCS/Quickstart]
+* Go into the examples/ directory, and run "../jp.rb"
+* Try out (and look at) the examples :)
+
+== Examples
+
+Producer and consumer examples are included for:
+* C++
+* Java
+* Ruby
