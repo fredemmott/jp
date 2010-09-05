@@ -97,8 +97,6 @@ class JpServer
 				}
 			)
 		rescue Mongo::OperationFailure => e
-			p e
-			p "Assuming it's an empty pool error"
 			raise EmptyPool
 		end
 		job = Job.new

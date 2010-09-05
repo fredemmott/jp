@@ -28,7 +28,7 @@ gen-java/jp.jar: gen-java/uk/co/fredemmott/jp/JobPool.java
 lifecycle.png: lifecycle.dot
 	dot -Tpng $< > $@
 
-examples:
+examples: thrift
 	$(MAKE) -C examples
 
 clean:
