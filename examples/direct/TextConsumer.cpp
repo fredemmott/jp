@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 			client.purge("text", job.id);
 			cout << "Consumed a " << job.message << "." << endl;
 		}
-		catch ( EmptyPool e)
+		catch(EmptyPool e)
 		{
 			cout << "Pool is empty." << endl;
 			break;

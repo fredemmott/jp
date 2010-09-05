@@ -5,16 +5,16 @@
 #include <transport/TTransportUtils.h>
 #include <transport/TBufferTransports.h>
 
-using namespace jp;
-
-using namespace apache::thrift;
-using namespace apache::thrift::protocol;
-using namespace apache::thrift::transport;
-
-using boost::shared_ptr;
-
 namespace jp
 {
+	using namespace jp;
+
+	using namespace apache::thrift;
+	using namespace apache::thrift::protocol;
+	using namespace apache::thrift::transport;
+
+	using boost::shared_ptr;
+
 	static const char* DEFAULT_HOSTNAME = "localhost";
 	static const int DEFAULT_PORT = 9090;
 
@@ -43,7 +43,7 @@ namespace jp
 				m_client->add(m_pool, translate(message));
 			}
 		protected:
-			virtual std::string translate(const T& message) = 0;
+			virtual std::string translate(const T& message) const = 0;
 		private:
 			JobPoolClient* m_client;
 			std::string m_pool;
@@ -57,7 +57,7 @@ namespace jp
 			{
 			}
 		protected:
-			virtual std::string translate(const std::string& message)
+			virtual std::string translate(const std::string& message) const
 			{
 				return message;
 			}
@@ -74,7 +74,7 @@ namespace jp
 				m_protocol = factory->getProtocol(m_transport);
 			}
 		protected:
-			virtual std::string translate(const T& message)
+			virtual std::string translate(const T& message) const
 			{
 				m_transport->resetBuffer();
 				message.write(&*m_protocol);
