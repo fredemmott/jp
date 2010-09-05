@@ -1,6 +1,4 @@
-default: thrift lifecycle.png
-
-all: default examples
+all: thrift lifecycle.png examples
 
 .PHONY: all thrift examples clean
 
