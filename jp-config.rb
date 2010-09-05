@@ -17,6 +17,6 @@ class JpConfig
 	end
 
 	def mongo_db
-		'jb_test'
+		'jp_test'
 	end
 end
