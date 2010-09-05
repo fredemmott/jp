@@ -44,6 +44,15 @@ Consumers and producers can be written in different languages.
 * rev rubygem
 * A monodb server/cluster to connect to
 
+== Message lifecycle
+
+http://files.fredemmott.co.uk/lifecycle.png
+
+* You can prevent the locked -> unlocked transition from occuring by using
+  a consumer-side timeout
+* Without a consumer-side timeout, there is a possibility that multiple
+  consumers will be processing the same message at the same time
+
 == Restrictions
 
 * Messages must be idempotent (i.e. it doesn't matter how many times they are
@@ -72,12 +81,3 @@ There are (at least) three ways messages can be consumed out of order:
 
 The first of these is unavoidable if multiple concurrent consumers are allowed
 per pool.
-
-= Message lifecycle
-
-http://files.fredemmott.co.uk/lifecycle.png
-
-* You can prevent the locked -> unlocked transition from occuring by using
-  a consumer-side timeout
-* Without a consumer-side timeout, there is a possibility that multiple
-  consumers will be processing the same message at the same time
