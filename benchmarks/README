@@ -1,1 +1,8 @@
 As always, take microbenchmarks with a pinch of salt.
+
+A few observations:
+ - Producer appears to scale nicely with an increasing number of them
+ - Parrallel consumers don't
+
+However, the odds are that your processing is going to be take significantly
+longer than reading from the queue.
