@@ -65,6 +65,30 @@ http://files.fredemmott.co.uk/lifecycle.png
   to work around this with a 'version' field serialized into the message (if
   later messages do not depend upon previous messages having been acted on).
 
+== Serialization
+
+jp simply passes around BLOBs as messages; it's entirely up to your application
+what serialization format you use - here's a few suggestions that are fairly
+portable between different languages, though you can use any other method you
+like:
+
+* UTF-8 if it's simple character data
+* UTF-8 JSON[http://www.json.org]
+* XML
+* UTF-8 YAML[http://www.yaml.org]
+* Google's {Protocol Buffers}[http://code.google.com/apis/protocolbuffers/]
+
+If you're willing to be locked into using the same language for producers and
+consumers, you can, of course use platform-specific functionality such as:
+
+* serialize/unserialize in PHP
+* Marshall in Ruby
+* Data::Dumper in Perl
+* writeObject/readObject (from Serializable) in Java
+
+It is, however, generally preferable to have more flexibility for the future by
+using a serialization method from the first list, or similar.
+
 == Reasons for out-of-order messages
 
 There are (at least) three ways messages can be consumed out of order:
