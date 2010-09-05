@@ -37,7 +37,7 @@ supports. At the time of writing, this includes:
 Consumers and producers can be written in different languages.
 
 Additionally, as an alternative to using the {Thrift interface}[http://github.com/fredemmott/jp/blob/master/jp.thrift]
-directly, [simplified client libraries]{http://github.com/fredemmott/jp/tree/master/lib/}
+directly, {simplified client libraries}[http://github.com/fredemmott/jp/tree/master/lib/]
 are currently provided for:
 * C++
 * Ruby
