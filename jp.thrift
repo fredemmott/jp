@@ -1,3 +1,7 @@
+namespace rb Jp
+namespace cpp jp
+namespace java uk.co.fredemmott.jp
+
 # Struct representing a job that's been acquired from a job pool
 struct Job
 {
@@ -15,7 +19,7 @@ exception NoSuchPool
 {
 }
 
-service Jp
+service JobPool
 {
 	##### USER API #####
 

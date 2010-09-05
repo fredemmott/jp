@@ -4,7 +4,8 @@ require 'mongo'
 require 'rev'
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
-require File.dirname(__FILE__) + '/gen-rb/jp'
+require 'job_pool'
+include Jp
 
 class CallbackTimer < Rev::TimerWatcher
 	def initialize interval, &block
@@ -20,7 +21,7 @@ end
 class JpServer
 	def initialize config
 		# Setup Thrift server
-		processor = Jp::Processor.new self
+		processor = JobPool::Processor.new self
 		socket = Thrift::ServerSocket.new config.port_number
 		transportFactory = Thrift::BufferedTransportFactory.new
 		@server = Thrift::ThreadedServer.new processor, socket, transportFactory

@@ -1,10 +1,12 @@
-#include "Jp.h"
+#include "JobPool.h"
 
 #include <protocol/TBinaryProtocol.h>
 #include <transport/TSocket.h>
 #include <transport/TTransportUtils.h>
 
 #include <iostream>
+
+using namespace jp;
 
 using namespace apache::thrift;
 using namespace apache::thrift::protocol;
@@ -19,7 +21,7 @@ int main(int argc, char** argv)
 	shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
 	shared_ptr<TTransport> transport(new TBufferedTransport(socket));
 	shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-	JpClient client(protocol);
+	JobPoolClient client(protocol);
 	transport->open();
 
 	cout << "Adding a chicken..." << endl;

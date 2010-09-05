@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/../../gen-rb/'
-require 'jp'
+require 'job_pool'
+include Jp
 
 socket = Thrift::Socket.new 'localhost', 9090
 transport = Thrift::BufferedTransport.new socket
 protocol = Thrift::BinaryProtocol.new transport
-client = Jp::Client.new protocol
+client = JobPool::Client.new protocol
 transport.open
 
 loop do
