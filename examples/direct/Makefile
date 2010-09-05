@@ -3,6 +3,7 @@ CPP_EXECUTABLES=\
 	TextProducer_cpp \
 
 JAVA_CLASSES=\
+	TextConsumer.class \
 	TextProducer.class \
 
 JAVA_EXECUTABLES=$(subst .class,_java,$(JAVA_CLASSES))
