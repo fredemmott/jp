@@ -1,6 +1,8 @@
-all: thrift lifecycle.png
+default: thrift lifecycle.png
 
-.PHONY: all thrift
+all: default examples
+
+.PHONY: all thrift examples clean
 
 thrift: gen-rb/job_pool.rb gen-cpp/libjp.a gen-java/jp.jar
 
@@ -27,3 +29,10 @@ gen-java/jp.jar: gen-java/uk/co/fredemmott/jp/JobPool.java
 
 lifecycle.png: lifecycle.dot
 	dot -Tpng $< > $@
+
+examples:
+	$(MAKE) -C examples
+
+clean:
+	$(MAKE) -C examples clean
+	rm -rf gen-* lifecycle.png
