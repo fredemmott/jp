@@ -113,11 +113,11 @@ per pool.
 
 * Setup a {MongoDB server}[http://www.mongodb.org/display/DOCS/Quickstart]
 * Go into the examples/ directory, and run "../jp.rb"
-* Try out (and look at) the examples :)
+* Try out (and look at) the examples[http://github.com/fredemmott/jp/tree/master/examples/direct/] :)
 
 == Examples
 
-Producer and consumer examples are included for:
+Producer and consumer examples[http://github.com/fredemmott/jp/tree/master/examples/direct/] are included for:
 * C++
 * Java
 * Ruby
