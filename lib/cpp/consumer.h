@@ -76,7 +76,7 @@ namespace jp
 #ifdef WITH_JP_LIBEVENT
 			void run()
 			{
-				event_base* base = event_init();
+				event_base* base = static_cast<event_base*>(event_init());
 
 				m_tv.tv_usec = 0;
 				m_tv.tv_sec = m_pollInterval;
