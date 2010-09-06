@@ -28,16 +28,25 @@ class CallbackTimer < Rev::TimerWatcher
 end
 
 class JpServer
-	def initialize config
-		# Setup Thrift server
-		processor = JobPool::Processor.new self
-		socket = Thrift::ServerSocket.new config.port_number
-		transportFactory = Thrift::BufferedTransportFactory.new
-		@server = Thrift::ThreadedServer.new processor, socket, transportFactory
+	def initialize config, options = {}
+		# Setup Thrift server (allowing dependency injection)
+		if options.member? :thrift_server then
+			@server = options[:server]
+		else
+			processor = JobPool::Processor.new self
+			socket = Thrift::ServerSocket.new config.port_number
+			transportFactory = Thrift::BufferedTransportFactory.new
+
+			@server = Thrift::ThreadedServer.new processor, socket, transportFactory
+		end
 
 		# Connect to mongodb
-		@connection = Mongo::Connection.from_uri config.mongo_uri
-		@database = @connection.db config.mongo_db
+		if options.member? :mongo_database then
+			@database = options[:mongo_database]
+		else
+			connection = Mongo::Connection.from_uri config.mongo_uri
+			@database = connection.db config.mongo_db
+		end
 
 		@pools = Hash.new
 		config.pools.each do |name, data|
