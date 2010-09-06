@@ -28,7 +28,7 @@ class JpServer
 	def initialize config, options = {}
 		# Setup Thrift server (allowing dependency injection)
 		if options.member? :thrift_server then
-			@server = options[:server]
+			@server = options[:thrift_server]
 		else
 			processor = JobPool::Processor.new self
 			socket = Thrift::ServerSocket.new config.port_number
