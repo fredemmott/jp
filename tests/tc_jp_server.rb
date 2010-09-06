@@ -3,6 +3,7 @@ require 'test/unit'
 require 'mocha'
 require 'jp_server'
 
+
 class TC_JpServer < Test::Unit::TestCase
 	def setup
 		@thrift = mock
@@ -16,16 +17,27 @@ class TC_JpServer < Test::Unit::TestCase
 		@jp = JpServer.new @config, thrift_server: @thrift, mongo_database: @mongo, default_timeout: @default_timeout
 	end
 
+	def mongo_pool
+		pool = mock
+		yield pool
+		@mongo.expects(:[]).with('test_pool').returns(pool)
+	end
+
 	def test_starts_thrift_server
 		@thrift.expects(:serve)
 		@jp.serve
 	end
 
-	def test_add message = 'foo'
-		pool = mock
-		pool.expects(:insert).with { |doc| doc['message'] == message && doc['locked'] == false }
+	def test_add
+		message = rand(10000).to_s
+		mongo_pool do |pool|
+			pool.expects(:insert).with do |p|
+				assert_equal message, p['message']
+				assert_equal false, p['locked']
+				true
+			end
+		end
 
-		@mongo.expects(:[]).with('test_pool').returns(pool)
 		@jp.add 'test_pool', message
 	end
 
@@ -43,15 +55,17 @@ class TC_JpServer < Test::Unit::TestCase
 		Time.expects(:new).returns(now)
 
 		# Check it boils down to a correct find-and-modify
-		pool = mock
-		pool.expects(:find_and_modify).with{ |p| p[:query].member? 'locked' }.with{ |p| !p[:query]['locked'] }.with{ |p|
-			p[:update]['$set']['locked'] == now.to_i }.with{ |p| p[:update]['$set']['locked_until'] == now.to_i + @default_timeout
-			}.returns(
+		mongo_pool do |pool|
+			pool.expects(:find_and_modify).with do |p|
+				assert p[:query].member?('locked'), 'has locked field'
+				assert !p[:query]['locked'], 'is not locked'
+				assert_equal now.to_i + @default_timeout, p[:update]['$set']['locked_until']
+				true
+			end.returns(
 				'message' => test_message,
 				'_id'     => test_id
 			)
-		# Give the mock pool to the mock mongo
-		@mongo.expects(:[]).with('test_pool').returns(pool)
+		end
 
 		# Try calling
 		job = @jp.acquire 'test_pool'
@@ -64,6 +78,13 @@ class TC_JpServer < Test::Unit::TestCase
 	def test_acquire_no_pool
 		assert_raise NoSuchPool do
 			@jp.acquire 'no_such_pool'
+		end
+	end
+
+	def test_acquire_empty_pool
+		mongo_pool { |pool| pool.expects(:find_and_modify).raises(Mongo::OperationFailure) }
+		assert_raise Jp::EmptyPool do
+			@jp.acquire 'test_pool'
 		end
 	end
 end
