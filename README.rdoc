@@ -44,11 +44,12 @@ are currently provided for:
 
 == Requirements
 
+* Ruby 1.9
 * Thrift (with Ruby support)
 * mongo rubygem
 * bson rubygem (you probably want bson_ext too for performance)
 * rev rubygem
-* A monodb server/cluster to connect to
+* A mongodb server/cluster to connect to
 
 == Message lifecycle
 
