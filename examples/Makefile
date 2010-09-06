@@ -10,7 +10,7 @@ gen-rb/example_types.rb: example.thrift
 gen-cpp/example_types.h: example.thrift
 	thrift --gen cpp $<
 
-subdirs:
+subdirs: thrift
 	$(MAKE) -C direct
 	$(MAKE) -C simple
 
