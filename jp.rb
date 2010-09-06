@@ -1,9 +1,11 @@
 #!/usr/bin/ruby
+$LOAD_PATH.push File.dirname(__FILE__)
+$LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
+
 require 'jp-config'
 require 'mongo'
 require 'rev'
 
-$LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
 require 'job_pool'
 include Jp
 
