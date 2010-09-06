@@ -118,11 +118,34 @@ per pool.
 
 = Getting started
 
-* Setup a {MongoDB server}[http://www.mongodb.org/display/DOCS/Quickstart]
-* Go into the examples/ directory, and run "../jp.rb"
-* Try out (and look at) the examples[http://github.com/fredemmott/jp/tree/master/examples/direct/] :)
+== {Setup a MongoDB server}[http://www.mongodb.org/display/DOCS/Quickstart]
+
+Follow the instructions on the mongodb website, or, for a quick start,
+download one of the tarballs from http://www.mongodb.org/downloads, then:
+
+ tar xfv /path/to/mongodb-OS-arch-version.tgz
+ cd mongodb-OS-arch-version
+ mkdir /var/tmp/mongodata
+ bin/mongod --dbpath /var/tmp/mongodata
+
+== Build/generate the Thrift bindings
+
+To build all the generated components, run:
+ make
+
+== Run jp
+
+ cd examples
+ ../jp.rb
+
+This starts jp using the configuration file in the examples directory.
+This:
+ * connects to a mongodb server on localhost
+ * sets up 'text', 'json', and 'thrift' pools for the examples
 
 == Examples
+
+Look at the contents of examples/ for an idea of how to use this.
 
 Producer and consumer {examples using the Thrift API}[http://github.com/fredemmott/jp/tree/master/examples/direct/]
 are available for:
