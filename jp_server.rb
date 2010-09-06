@@ -26,6 +26,7 @@ end
 
 class JpServer
 	def initialize config, options = {}
+		options[:default_timeout] ||= 3600 # 1 hour
 		# Setup Thrift server (allowing dependency injection)
 		if options.member? :thrift_server then
 			@server = options[:thrift_server]
@@ -47,7 +48,7 @@ class JpServer
 
 		@pools = Hash.new
 		config.pools.each do |name, data|
-			data[:timeout] ||= 3600 # Default to 1 hour
+			data[:timeout] ||= options[:default_timeout]
 			data[:cleanup_interval] ||= data[:timeout]
 			data[:purged] = Array.new
 			@pools[name] = data
