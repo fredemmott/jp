@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.push File.dirname(__FILE__)
+$LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
+
+require 'jp_config_loader'
+require 'jp_unlocker'
+
+s = JpUnlocker.new Jp::load_config
+s.run
