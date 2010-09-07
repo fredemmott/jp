@@ -139,8 +139,7 @@ To build all the generated components, run:
 
 == Run jp
 
- cd examples
- ../jp
+ ./jp examples/jp-config.rb
 
 This starts jp using the configuration file in the examples directory.
 This:

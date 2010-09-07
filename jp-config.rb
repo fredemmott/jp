@@ -1,1 +1,0 @@
-examples/jp-config.rb
