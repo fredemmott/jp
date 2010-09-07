@@ -10,7 +10,6 @@ autoload :JSON, 'json'
 module Jp
 	class AbstractProducer < AbstractClient
 		def initialize queue, options = {}
-			raise NotImplementedError.new unless self.class != Jp::AbstractProducer
 			super queue, options
 		end
 		def add message

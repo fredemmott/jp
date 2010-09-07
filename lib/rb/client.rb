@@ -1,7 +1,6 @@
 module Jp
 	class AbstractClient
 		def initialize queue, options = {}
-			raise NotImplementedError.new unless self.class != Jp::AbstractClient
 			options[:host] ||= 'localhost'
 			options[:port] ||= 9090
 			options[:poll_interval] ||= 1

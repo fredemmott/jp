@@ -11,7 +11,6 @@ autoload :JSON, 'json'
 module Jp
 	class AbstractConsumer < AbstractClient
 		def initialize queue, options = {}, &block
-			raise NotImplementedError.new unless self.class != Jp::AbstractConsumer
 			super queue, options
 			@block = block
 		end
