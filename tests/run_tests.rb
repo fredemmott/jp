@@ -3,5 +3,11 @@ $LOAD_PATH.push File.dirname(__FILE__) + "/../classes/"
 $LOAD_PATH.push File.dirname(__FILE__)
 require 'helpers'
 require 'test/unit'
-require 'tc_jp_server_isolated'
-require 'tc_jp_unlocker_isolated'
+
+if ARGV[0]
+	require ARGV[0]
+else
+	Dir.glob('./tc_*.rb').each do |testcase|
+		require testcase
+	end
+end
