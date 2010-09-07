@@ -1,17 +1,11 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 
+require 'ruby-1.9.0-compat'
 require 'mongo'
 require 'rev'
 require 'job_pool'
 include Jp
-
-# Compatibility with Ruby 1.9.0
-unless Encoding.respond_to? :default_internal
-	def Encoding.default_internal
-		nil
-	end
-end
 
 class CallbackTimer < Rev::TimerWatcher
 	def initialize interval, &block
