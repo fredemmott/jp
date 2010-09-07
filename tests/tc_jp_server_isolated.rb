@@ -3,7 +3,6 @@ require 'test/unit'
 require 'mocha'
 require 'jp_server'
 
-
 class TC_JpServer_Isolated < Test::Unit::TestCase
 	def setup
 		@thrift = mock
