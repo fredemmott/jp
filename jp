@@ -2,18 +2,8 @@
 $LOAD_PATH.push File.dirname(__FILE__)
 $LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
 
-require 'jp-config'
+require 'jp_config_loader'
 require 'jp_server'
 
-c = JpConfig.new
-def c.options
-	m = self.public_methods - Object.public_methods - [:options]
-	h = Hash.new
-	m.each do |method|
-		h[method] = self.send method
-	end
-	h
-end
-
-s = JpServer.new c.options
+s = JpServer.new Jp::load_config
 s.serve
