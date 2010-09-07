@@ -43,19 +43,28 @@ class JpServer
 			@pools[name] = data
 		end
 
-		@unlocker = JpUnlocker.new options unless options[:skip_embedded_unlocker]
+		@unlocker = nil
+		unless options[:skip_embedded_unlocker]
+			if options.member? :injected_unlocker
+				@unlocker = options[:injected_unlocker]
+			else
+				@unlocker = JpUnlocker.new options
+			end
+		end
 	end
 
 	def serve
 		@start_time = Time.new
 		# Look for expired entries
 		@unlocker ||= nil
-		if @unlocker then
-			Thread.new do
+		unlocker_thread = nil
+		if @unlocker
+			unlocker_thread = Thread.new do
 				@unlocker.run
 			end
 		end
 		@server.serve
+		unlocker_thread.join if unlocker_thread
 	end
 	
 	def add pool, message

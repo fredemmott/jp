@@ -7,18 +7,26 @@ require 'jp_server'
 class TC_JpServer_Isolated < Test::Unit::TestCase
 	def setup
 		@thrift = mock
+		@unlocker = mock
 		@mongo = mock
 		@mongo.stubs(:[]).returns(mock)
 
 		@default_timeout = rand 1000
 
-		@jp = JpServer.new({
-			:injected_thrift_server  => @thrift,
-			:injected_mongo_database => @mongo,
-			:mongo_db                => 'test_db',
-			:default_timeout         => @default_timeout,
-			:pools                   => {'test_pool' => {}},
-		})
+		create_jp
+	end
+
+	def create_jp extra_options = {}
+		@jp = JpServer.new(
+			{
+				:injected_thrift_server  => @thrift,
+				:injected_mongo_database => @mongo,
+				:injected_unlocker       => @unlocker,
+				:mongo_db                => 'test_db',
+				:default_timeout         => @default_timeout,
+				:pools                   => {'test_pool' => {}},
+			}.merge(extra_options)
+		)
 	end
 
 	def mongo_pool
@@ -27,7 +35,14 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 		@mongo.expects(:[]).with('test_pool').returns(pool)
 	end
 
-	def test_starts_thrift_server
+	def test_starts_thrift_and_unlocker
+		@thrift.expects(:serve)
+		@unlocker.expects(:run)
+		@jp.serve
+	end
+
+	def test_does_not_start_unlocker_if_skipped
+		create_jp skip_embedded_unlocker: true
 		@thrift.expects(:serve)
 		@jp.serve
 	end
