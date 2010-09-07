@@ -4,7 +4,7 @@ require 'mocha'
 require 'jp_server'
 
 
-class TC_JpServer < Test::Unit::TestCase
+class TC_JpServer_Isolated < Test::Unit::TestCase
 	def setup
 		@thrift = mock
 		@mongo = mock
