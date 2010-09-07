@@ -43,7 +43,7 @@ class JpServer
 			@pools[name] = data
 		end
 
-		@unlocker = JpUnlocker.new options
+		@unlocker = JpUnlocker.new options unless options[:skip_embedded_unlocker]
 	end
 
 	def serve

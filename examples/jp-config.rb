@@ -16,6 +16,13 @@ class JpConfig
 		}
 	end
 
+	def skip_embedded_unlocker
+		# Defaults to false; if set to true, pool items won't be unlocked by the main jp daemon.
+		# You might want to run a separate jp-unlocker process (just one) if you're running multiple
+		# instances of the jp daemon against the same mongodb cluster.
+		false
+	end
+
 	def port_number
 		9090
 	end
