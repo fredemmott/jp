@@ -8,11 +8,15 @@ module Jp
 			@queue = queue
 			@options = options
 
-			socket = Thrift::Socket.new options[:host], options[:port]
-			transport = Thrift::BufferedTransport.new socket
-			protocol = Thrift::BinaryProtocol.new transport
-			@client = JobPool::Client.new protocol
-			transport.open
+			if options[:client]
+				@client = options[:client]
+			else
+				socket = Thrift::Socket.new options[:host], options[:port]
+				transport = Thrift::BufferedTransport.new socket
+				protocol = Thrift::BinaryProtocol.new transport
+				@client = JobPool::Client.new protocol
+				transport.open
+			end
 		end
 	end
 end
