@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
-require 'test/unit'
-require 'mocha'
 require 'jp_server'
 
+require 'test/unit'
+require 'mocha'
+
 class TC_JpServer_Isolated < Test::Unit::TestCase
+	include JpTestHelpers
 	def setup
 		@thrift = mock
 		@unlocker = mock
@@ -27,11 +29,6 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 		)
 	end
 
-	def mongo_pool
-		pool = mock
-		yield pool
-		@mongo.expects(:[]).with('test_pool').returns(pool)
-	end
 
 	def test_starts_thrift_and_unlocker
 		@thrift.expects(:serve)
