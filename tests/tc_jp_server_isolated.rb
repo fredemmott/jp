@@ -8,7 +8,6 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 		@thrift = mock
 		@unlocker = mock
 		@mongo = mock
-		@mongo.stubs(:[]).returns(mock)
 
 		@default_timeout = rand 1000
 
