@@ -1,22 +1,12 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 
-require 'ruby-1.9.0-compat'
-require 'mongo'
-require 'rev'
+require 'jp_unlocker'
 require 'job_pool'
+require 'ruby-1.9.0-compat'
+
+require 'mongo'
 include Jp
-
-class CallbackTimer < Rev::TimerWatcher
-	def initialize interval, &block
-		super interval, true
-		@block = block
-	end
-
-	def on_timer
-		@block.call
-	end
-end
 
 class JpServer
 	def initialize options = {}
@@ -53,29 +43,17 @@ class JpServer
 			@pools[name] = data
 		end
 
+		@unlocker = JpUnlocker.new options
 	end
 
 	def serve
 		@start_time = Time.new
 		# Look for expired entries
-		Thread.new do
-			l = Rev::Loop.new
-			@pools.each do |name, data|
-				pool = @database[name]
-				w = CallbackTimer.new data[:cleanup_interval] {
-					pool.update(
-						{
-							'locked_until' => { '$lte' => Time.new.to_i }
-						},
-						{
-							'$set' => { 'locked' => false }
-						},
-						multi: true
-					)
-				}
-				w.attach l
+		@unlocker ||= nil
+		if @unlocker then
+			Thread.new do
+				@unlocker.run
 			end
-			l.run
 		end
 		@server.serve
 	end
