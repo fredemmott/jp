@@ -8,13 +8,17 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 	def setup
 		@thrift = mock
 		@mongo = mock
-		@config = mock
-		@config.stubs(:pools).returns({'test_pool' => {}})
 		@mongo.stubs(:[]).returns(mock)
 
 		@default_timeout = rand 1000
 
-		@jp = JpServer.new @config, thrift_server: @thrift, mongo_database: @mongo, default_timeout: @default_timeout
+		@jp = JpServer.new({
+			:injected_thrift_server  => @thrift,
+			:injected_mongo_database => @mongo,
+			:mongo_db                => 'test_db',
+			:default_timeout         => @default_timeout,
+			:pools                   => {'test_pool' => {}},
+		})
 	end
 
 	def mongo_pool
