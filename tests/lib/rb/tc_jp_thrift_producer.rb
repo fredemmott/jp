@@ -24,16 +24,17 @@ class TC_Jp_ThriftProducer < Test::Unit::TestCase
 	end
 
 	def test_add
-		@jp.expects(:add).with do |pool,bytes|
+		@jp.expects(:add).with do |pool,blob|
 			# Check the pool name
 			assert_equal @test_pool, pool, 'pool matches'
 
-			# Thrift binary -> struct
+			# Deserialize the blob, and check it matches our original struct
 			message = ExampleData.new
-			Thrift::Deserializer.new.deserialize message, bytes
+			Thrift::Deserializer.new.deserialize message, blob 
+			assert_equal @test_message, message, 'structs match'
 
-			# Compare the original and asserted struct
-			assert_equal @test_message, message, 'message matches'
+			# Serialize our struct, and make sure it matches the new blob
+			assert_equal Thrift::Serializer.new.serialize(@test_message), blob, 'blobs match'
 			true
 		end
 		
