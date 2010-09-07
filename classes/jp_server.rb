@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.push File.dirname(__FILE__) + '/gen-rb/'
+$LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 
 require 'mongo'
 require 'rev'
