@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+# Test JpServer with all external dependencies mocked
+# - doesn't require a mongodb server
+# - doesn't start the Thrift server
 require 'jp_server'
 
 require 'test/unit'
