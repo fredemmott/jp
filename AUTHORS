@@ -1,0 +1,8 @@
+# Please see COPYRIGHT for a list of copyright holders.
+# On the offchance it's useful in the future, this is file is valid YAML.
+---
+Fred Emmott <mail@fredemmott.co.uk>:
+ - JpServer and JpUnlocker
+ - C++, Java, and Ruby direct examples
+ - C++ and Ruby simple libraries
+ - C++ and Ruby simple examples
