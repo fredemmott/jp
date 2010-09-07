@@ -87,4 +87,18 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 			@jp.acquire 'test_pool'
 		end
 	end
+
+	def test_purge
+		id = BSON::ObjectId.new
+		mongo_pool do |pool|
+			pool.expects(:remove).with { |p| p[:_id] == id }
+		end
+		@jp.purge 'test_pool', id.to_s
+	end
+
+	def test_purge_no_pool
+		assert_raise NoSuchPool do
+			@jp.purge 'no_such_pool', '123'
+		end
+	end
 end
