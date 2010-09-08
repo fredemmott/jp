@@ -22,6 +22,7 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 	def test_counts_start_at_zero
 		assert_equal 0, @jp.add_count(@test_pool)
 		assert_equal 0, @jp.acquire_count(@test_pool)
+		assert_equal 0, @jp.empty_count(@test_pool)
 		assert_equal 0, @jp.purge_count(@test_pool)
 	end
 
@@ -65,6 +66,7 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 
 	def test_acquire_no_pool
 		assert_equal 0, @jp.acquire_count(@test_pool)
+		assert_equal 0, @jp.empty_count(@test_pool)
 		@server.expects(:acquire).with(@test_pool).raises(NoSuchPool.new)
 
 		assert_raise NoSuchPool do
@@ -72,6 +74,7 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 		end
 
 		assert_equal 0, @jp.acquire_count(@test_pool)
+		assert_equal 0, @jp.empty_count(@test_pool)
 	end
 
 	def test_acquire_empty_pool
@@ -83,6 +86,7 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 		end
 
 		assert_equal 0, @jp.acquire_count(@test_pool)
+		assert_equal 1, @jp.empty_count(@test_pool)
 	end
 
 	def test_purge

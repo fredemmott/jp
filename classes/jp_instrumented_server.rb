@@ -11,6 +11,7 @@ class JpInstrumentedServer < JpServer
 		@add_count = Hash.new 0
 		@acquire_count = Hash.new 0
 		@purge_count = Hash.new 0
+		@empty_count = Hash.new 0
 	end
 
 	# Readers
@@ -33,6 +34,11 @@ class JpInstrumentedServer < JpServer
 		@acquire_count[pool]
 	end
 
+	def empty_count pool
+		raise Jp::NoSuchPool.new unless @pools.include? pool
+		@empty_count[pool]
+	end
+
 	def purge_count pool
 		raise Jp::NoSuchPool.new unless @pools.include? pool
 		@purge_count[pool]
@@ -52,8 +58,13 @@ class JpInstrumentedServer < JpServer
 	end
 
 	def acquire pool
-		result = @server.acquire pool
-		@acquire_count[pool] += 1
+		begin
+			result = @server.acquire pool
+			@acquire_count[pool] += 1
+		rescue EmptyPool => e
+			@empty_count[pool] += 1
+			raise e
+		end
 		result
 	end
 

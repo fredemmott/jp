@@ -57,5 +57,6 @@ service JobPoolInstrumented extends JobPool
 
 	i64 add_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 	i64 acquire_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
+	i64 empty_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 	i64 purge_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 }
