@@ -5,7 +5,9 @@ require 'job_pool_instrumented'
 
 class JpInstrumentedServer < JpServer
 	def initialize options = {}
-		super options
+		options[:jp_server] ||= JpServer.new options.merge(thrift_processor: JobPoolInstrumented::Processor.new(self))
+		@server = options[:jp_server]
+		@pools = options[:pools].keys
 		@add_count = Hash.new 0
 		@acquire_count = Hash.new 0
 		@purge_count = Hash.new 0
@@ -18,21 +20,21 @@ class JpInstrumentedServer < JpServer
 	end
 
 	def pools
-		@pools.keys
+		@pools
 	end
 
 	def add_count pool
-		raise Jp::NoSuchPool.new unless @pools.member? pool
+		raise Jp::NoSuchPool.new unless @pools.include? pool
 		@add_count[pool]
 	end
 
 	def acquire_count pool
-		raise Jp::NoSuchPool.new unless @pools.member? pool
+		raise Jp::NoSuchPool.new unless @pools.include? pool
 		@acquire_count[pool]
 	end
 
 	def purge_count pool
-		raise Jp::NoSuchPool.new unless @pools.member? pool
+		raise Jp::NoSuchPool.new unless @pools.include? pool
 		@purge_count[pool]
 	end
 
@@ -40,29 +42,24 @@ class JpInstrumentedServer < JpServer
 
 	def serve
 		@start_time = Time.new.to_i
-		super
+		@server.serve
 	end
 
 	def add pool, message
-		result = super pool, message
+		result = @server.add pool, message
 		@add_count[pool] += 1
 		result
 	end
 
 	def acquire pool
-		result = super pool
+		result = @server.acquire pool
 		@acquire_count[pool] += 1
 		result
 	end
 
 	def purge pool, id
-		result = super pool, id
+		result = @server.purge pool, id
 		@purge_count[pool] += 1
 		result
-	end
-
-	private
-	def thrift_processor
-		JobPoolInstrumented::Processor.new self
 	end
 end

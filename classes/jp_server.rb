@@ -21,10 +21,12 @@ class JpServer
 		if options.member? :injected_thrift_server then
 			@server = options[:injected_thrift_server]
 		else
+			processor = options[:thrift_processor] # For testing, and allow instrumented server to override
+			processor ||= JobPool::Processor.new self
 			socket = Thrift::ServerSocket.new options[:port_number]
 			transportFactory = Thrift::BufferedTransportFactory.new
 
-			@server = Thrift::ThreadedServer.new thrift_processor, socket, transportFactory
+			@server = Thrift::ThreadedServer.new processor, socket, transportFactory
 		end
 
 		# Connect to mongodb
@@ -103,11 +105,5 @@ class JpServer
 	def purge pool, id
 		raise NoSuchPool.new unless @pools.member? pool
 		@database[pool].remove _id: BSON::ObjectId(id)
-	end
-
-	private
-
-	def thrift_processor
-		JobPool::Processor.new self
 	end
 end
