@@ -46,9 +46,11 @@ service JobPool
 	void purge(1:required string pool_name, 2:required binary id) throws (
 		1:NoSuchPool nsp
 	)
+}
 
+service JobPoolInstrumented extends JobPool
+{
 	##### ADMIN API #####
-	# Not yet implemented, don't try to use
 
 	list<string> pools()
 	i64 start_time()
@@ -56,5 +58,4 @@ service JobPool
 	i64 add_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 	i64 acquire_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 	i64 purge_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
-	i64 fail_count(1:required string pool_name) throws ( 1:NoSuchPool nsp )
 }

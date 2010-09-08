@@ -21,11 +21,10 @@ class JpServer
 		if options.member? :injected_thrift_server then
 			@server = options[:injected_thrift_server]
 		else
-			processor = JobPool::Processor.new self
 			socket = Thrift::ServerSocket.new options[:port_number]
 			transportFactory = Thrift::BufferedTransportFactory.new
 
-			@server = Thrift::ThreadedServer.new processor, socket, transportFactory
+			@server = Thrift::ThreadedServer.new thrift_processor, socket, transportFactory
 		end
 
 		# Connect to mongodb
@@ -54,7 +53,6 @@ class JpServer
 	end
 
 	def serve
-		@start_time = Time.new
 		# Look for expired entries
 		@unlocker ||= nil
 		unlocker_thread = nil
@@ -72,7 +70,6 @@ class JpServer
 
 		doc = {
 			'message'      => message,
-			'enqueue_time' => Time.new.to_i,
 			'locked'       => false,
 		}
 
@@ -106,5 +103,11 @@ class JpServer
 	def purge pool, id
 		raise NoSuchPool.new unless @pools.member? pool
 		@database[pool].remove _id: BSON::ObjectId(id)
+	end
+
+	private
+
+	def thrift_processor
+		JobPool::Processor.new self
 	end
 end

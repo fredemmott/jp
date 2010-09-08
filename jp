@@ -3,7 +3,7 @@ $LOAD_PATH.push File.dirname(__FILE__)
 $LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
 
 require 'jp_config_loader'
-require 'jp_server'
+require 'jp_instrumented_server'
 
-s = JpServer.new Jp::load_config
+s = JpInstrumentedServer.new Jp::load_config
 s.serve
