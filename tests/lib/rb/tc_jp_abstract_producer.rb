@@ -25,4 +25,10 @@ class TC_Jp_AbstractProducer < Test::Unit::TestCase
 			@p.add @test_message
 		end
 	end
+
+	def test_translate_not_implemented
+		assert_raises NotImplementedError do
+			@p.send :translate, nil
+		end
+	end
 end
