@@ -22,7 +22,7 @@ public class TextConsumer
 			{
 				Job job = client.acquire("text");
 				System.out.print("I'm consuming a ");
-				System.out.println(new String(job.message, "UTF-8"));
+				System.out.println(new String(job.message.array(), "UTF-8"));
 				client.purge("text", job.id);
 				System.out.println("Consumed.");
 			}

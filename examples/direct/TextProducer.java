@@ -19,7 +19,7 @@ public class TextProducer
 			transport.open();
 
 			System.out.println("Adding a bean...");
-			client.add("text", "bean".getBytes("UTF-8"));
+			client.add("text", java.nio.ByteBuffer.wrap("bean".getBytes("UTF-8")));
 			System.out.println("Added a bean.");
 		}
 		catch (java.io.UnsupportedEncodingException e)
