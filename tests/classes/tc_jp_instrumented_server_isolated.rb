@@ -106,4 +106,28 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 
 		assert_equal 0, @jp.purge_count(@test_pool)
 	end
+
+	def test_add_count_no_pool
+		assert_raise NoSuchPool do
+			@jp.add_count 'no_such_pool'
+		end
+	end
+
+	def test_acquire_count_no_pool
+		assert_raise NoSuchPool do
+			@jp.acquire_count 'no_such_pool'
+		end
+	end
+
+	def test_empty_count_no_pool
+		assert_raise NoSuchPool do
+			@jp.empty_count 'no_such_pool'
+		end
+	end
+
+	def test_purge_count_no_pool
+		assert_raise NoSuchPool do
+			@jp.purge_count 'no_such_pool'
+		end
+	end
 end
