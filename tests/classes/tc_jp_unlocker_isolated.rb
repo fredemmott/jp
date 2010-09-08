@@ -59,21 +59,16 @@ class TC_JpUnlocker_Isolated < Test::Unit::TestCase
 	end
 
 	def test_run_calls_clean_on_timer
-		# Don't run forever
-		l = Rev::Loop.new
-		def l.run
-			run_once
-		end
-		Rev::Loop.expects(:new).returns(l)
-
-		# Mock the watcher
-		t = Rev::TimerWatcher.new 0, true
+		# Make the timer repeat [near] instantly
+		t = Rev::TimerWatcher.new Float::EPSILON, true
 		Rev::TimerWatcher.expects(:new).with(@default_timeout, true).returns(t)
 
-		# Make sure that 'clean' is called
-		@unlocker.expects(:clean).with('test_pool')
+		# Make sure that 'clean' is called until we throw an exception to get out of it
+		@unlocker.expects(:clean).with('test_pool').times(4).returns(nil).returns(nil).returns(nil).raises(Exception.new)
 
 		# Run the test
-		@unlocker.run
+		assert_raises Exception do
+			@unlocker.run
+		end
 	end
 end
