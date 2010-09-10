@@ -2,4 +2,7 @@ gen-*/
 *.png
 *.swp
 *.swo
+*.project
+*.classpath
 *~
+bin/*
