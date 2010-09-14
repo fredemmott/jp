@@ -2,5 +2,6 @@
     <info organisation="uk.co.fredemmott" module="jp"/>
     <dependencies>
         <dependency org="org.mockito" name="mockito-all" rev="1.8.5"/>
+        <dependency org="junit" name="junit" rev="4.8.1"/>
     </dependencies>
 </ivy-module>

@@ -6,4 +6,4 @@ gen-*/
 *.classpath
 *~
 bin/*
-lib/java/build/*
+lib/java-build/*

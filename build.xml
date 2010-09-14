@@ -1,15 +1,14 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="jp-lib" basedir="." default="main">
 
-	<property name="lib.dir" value="lib/java" />
-
-	<property name="build.dir" value="${lib.dir}/build" />
-	<property name="src.dir" value="${lib.dir}/src" />
-	<property name="test.dir" value="${lib.dir}/test" />
+	<property name="build.dir" value="lib/java-build" />
+	<property name="src.dir" value="lib/" />
+	<property name="test.dir" value="tests/lib/java" />
 
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="testclasses.dir" value="${build.dir}/testclasses" />
 	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="report.dir" value="${build.dir}/report" />
 	
 	<property name="ivy.lib.dir" value="${build.dir}/lib/"/>
 	<property name="libs.dir" value="${ivy.lib.dir}" />
@@ -24,7 +23,7 @@
 
 	<path id="appjar" location="${jar.dir}/${ant.project.name}.jar" />
 
-	<target name="main" depends="clean,jar" />
+	<target name="main" depends="clean,jar,junit" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
