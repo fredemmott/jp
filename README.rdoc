@@ -51,6 +51,8 @@ are currently provided for:
 * rev rubygem
 * A mongodb server/cluster to connect to
 
+* Ant (simple java client build only)
+
 You might additionally want the bson_ext rubygem, which normally increases
 performance - however, it appears to be incompatible with Ruby 1.9.0 on
 Lenny.
@@ -160,3 +162,4 @@ Producer and consumer {examples using the simplified libraries}[http://github.co
 are available for:
 * C++
 * Ruby
+* Java
