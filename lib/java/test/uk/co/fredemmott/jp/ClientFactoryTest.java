@@ -25,5 +25,6 @@ public class ClientFactoryTest {
 		ClientFactory.setInstance(instance);
 		
 		assertSame(instance, ClientFactory.getInstance());
+		ClientFactory.setInstance(null);
 	}
 }

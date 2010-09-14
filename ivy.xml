@@ -1,0 +1,6 @@
+<ivy-module version="2.0">
+    <info organisation="uk.co.fredemmott" module="jp"/>
+    <dependencies>
+        <dependency org="org.mockito" name="mockito-all" rev="1.8.5"/>
+    </dependencies>
+</ivy-module>
