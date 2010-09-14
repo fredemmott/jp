@@ -9,6 +9,7 @@
 	<property name="testclasses.dir" value="${build.dir}/testclasses" />
 	<property name="jar.dir" value="${build.dir}/jar" />
 	<property name="report.dir" value="${build.dir}/report" />
+	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	
 	<property name="ivy.lib.dir" value="${build.dir}/lib/"/>
 	<property name="libs.dir" value="${ivy.lib.dir}" />
@@ -23,7 +24,7 @@
 
 	<path id="appjar" location="${jar.dir}/${ant.project.name}.jar" />
 
-	<target name="main" depends="clean,jar,junit" />
+	<target name="main" depends="clean,jar,junit,javadoc" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
