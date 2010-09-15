@@ -150,7 +150,8 @@ This:
 
 == Examples
 
-Look at the contents of examples/ for an idea of how to use this.
+Look at the contents of examples/ for an idea of how to use this - to build them, and their dependencies, run 'make examples' from the
+top-most directory.
 
 Producer and consumer {examples using the Thrift API}[http://github.com/fredemmott/jp/tree/master/examples/direct/]
 are available for:
