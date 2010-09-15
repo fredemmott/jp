@@ -13,7 +13,7 @@ public class TextProducer {
 	
 	public static void main(String[] args) throws TTransportException {
 		// Create a new producer
-		Producer<String> producer = new uk.co.fredemmott.jp.producers.TextProducer("localhost", 1234, "text");
+		Producer<String> producer = new uk.co.fredemmott.jp.producers.TextProducer("localhost", 9090, "text");
 		
 		// Add 100 messages to the pool
 		for (int i=0; i<100; i++) {
