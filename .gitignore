@@ -4,6 +4,7 @@ gen-*/
 *.swo
 *.project
 *.classpath
+*.class
 *~
 bin/*
 lib/java-build/*

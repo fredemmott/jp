@@ -3,6 +3,8 @@
 	<property name="build.dir" value="lib/java-build" />
 	<property name="src.dir" value="lib/" />
 	<property name="test.dir" value="tests/lib/java" />
+	
+	<property name="examples.dir" value="examples/simple" />
 
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
@@ -24,7 +26,7 @@
 
 	<path id="appjar" location="${jar.dir}/${ant.project.name}.jar" />
 
-	<target name="main" depends="clean,jar,junit,javadoc" />
+	<target name="main" depends="clean,jar,junit,javadoc,compile_examples" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -79,7 +81,16 @@
 			</classpath>
 		</javac>
 	</target>
-
+	
+	<target name="compile_examples" depends="jar">
+		<javac srcdir="${examples.dir}" destdir="${examples.dir}" classpathref="classpath">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="appjar" />
+			</classpath>
+		</javac>
+	</target>
+					
 	<target name="jar" depends="compile">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
