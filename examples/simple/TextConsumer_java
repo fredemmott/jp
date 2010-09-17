@@ -1,2 +1,0 @@
-#!/bin/sh
-java -cp ../../gen-java/jp.jar:/usr/share/java/libthrift.jar:/usr/share/java/slf4j-nop.jar:/usr/share/java/slf4j-api.jar:../../lib/java-build/jar/jp-lib.jar:. TextConsumer

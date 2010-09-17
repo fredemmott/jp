@@ -16,17 +16,19 @@
 	<property name="ivy.lib.dir" value="${build.dir}/lib/"/>
 	<property name="libs.dir" value="${ivy.lib.dir}" />
 	
+	<!-- Change this for your local thrift lib jar -->
+	<property name="thrift.lib" value="/usr/share/java/libthrift.jar" />
+	
 	<path id="classpath">
 		<fileset dir="lib/" includes="**/*.jar" />
 		<fileset dir="lib/" includes="**/*.jar" />
-		<pathelement location="/usr/share/java/libthrift.jar" />
-		<pathelement location="/usr/share/java/slf4j-api.jar" />
+		<pathelement location="${thrift.lib}" />
 		<pathelement location="gen-java/jp.jar" />
 	</path>
 
 	<path id="appjar" location="${jar.dir}/${ant.project.name}.jar" />
 
-	<target name="main" depends="clean,jar,junit,javadoc,compile_examples" />
+	<target name="main" depends="clean,jar,junit,javadoc,compile_examples,create_scripts" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -89,6 +91,23 @@
 				<path refid="appjar" />
 			</classpath>
 		</javac>
+	</target>
+	
+	<target name="create_scripts">
+		<delete file = "${examples.dir}/TextConsumer_java"/>
+		<delete file = "${examples.dir}/TextProducer_java"/>
+		<echo file="${examples.dir}/TextConsumer_java" append="false">#\!/bin/sh
+CLASSPATH="../../gen-java/jp.jar:../../lib/java-build/lib/*:/usr/share/java/libthrift.jar:../../lib/java-build/jar/jp-lib.jar:."
+export CLASSPATH
+java TextConsumer
+		</echo>
+		<echo file="${examples.dir}/TextProducer_java" append="false">#\!/bin/sh
+CLASSPATH="../../gen-java/jp.jar:../../lib/java-build/lib/*:/usr/share/java/libthrift.jar:../../lib/java-build/jar/jp-lib.jar:."
+export CLASSPATH
+java TextProducer
+		</echo>
+		<chmod file="${examples.dir}/TextConsumer_java" perm="ugo+x"/>
+		<chmod file="${examples.dir}/TextProducer_java" perm="ugo+x"/>
 	</target>
 					
 	<target name="jar" depends="compile">
