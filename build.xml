@@ -3,6 +3,8 @@
 	<property name="build.dir" value="lib/java-build" />
 	<property name="src.dir" value="lib/" />
 	<property name="test.dir" value="tests/lib/java" />
+	
+	<property name="examples.dir" value="examples/simple" />
 
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
@@ -14,17 +16,19 @@
 	<property name="ivy.lib.dir" value="${build.dir}/lib/"/>
 	<property name="libs.dir" value="${ivy.lib.dir}" />
 	
+	<!-- Change this for your local thrift lib jar -->
+	<property name="thrift.lib" value="/usr/share/java/libthrift.jar" />
+	
 	<path id="classpath">
 		<fileset dir="lib/" includes="**/*.jar" />
 		<fileset dir="lib/" includes="**/*.jar" />
-		<pathelement location="/usr/share/java/libthrift.jar" />
-		<pathelement location="/usr/share/java/slf4j-api.jar" />
+		<pathelement location="${thrift.lib}" />
 		<pathelement location="gen-java/jp.jar" />
 	</path>
 
 	<path id="appjar" location="${jar.dir}/${ant.project.name}.jar" />
 
-	<target name="main" depends="clean,jar,junit,javadoc" />
+	<target name="main" depends="clean,jar,junit,javadoc,compile_examples,create_scripts" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -79,7 +83,33 @@
 			</classpath>
 		</javac>
 	</target>
-
+	
+	<target name="compile_examples" depends="jar">
+		<javac srcdir="${examples.dir}" destdir="${examples.dir}" classpathref="classpath">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="appjar" />
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="create_scripts">
+		<delete file = "${examples.dir}/TextConsumer_java"/>
+		<delete file = "${examples.dir}/TextProducer_java"/>
+		<echo file="${examples.dir}/TextConsumer_java" append="false">#\!/bin/sh
+CLASSPATH="../../gen-java/jp.jar:../../lib/java-build/lib/*:/usr/share/java/libthrift.jar:../../lib/java-build/jar/jp-lib.jar:."
+export CLASSPATH
+java TextConsumer
+		</echo>
+		<echo file="${examples.dir}/TextProducer_java" append="false">#\!/bin/sh
+CLASSPATH="../../gen-java/jp.jar:../../lib/java-build/lib/*:/usr/share/java/libthrift.jar:../../lib/java-build/jar/jp-lib.jar:."
+export CLASSPATH
+java TextProducer
+		</echo>
+		<chmod file="${examples.dir}/TextConsumer_java" perm="ugo+x"/>
+		<chmod file="${examples.dir}/TextProducer_java" perm="ugo+x"/>
+	</target>
+					
 	<target name="jar" depends="compile">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
