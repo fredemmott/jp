@@ -70,6 +70,7 @@ javadoc:
 
 examples: thrift lib
 	$(MAKE) -C examples
+	ant compile_examples create_scripts
 
 clean:
 	$(MAKE) -C examples clean
