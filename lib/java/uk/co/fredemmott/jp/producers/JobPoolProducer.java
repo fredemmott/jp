@@ -30,5 +30,4 @@ public abstract class JobPoolProducer<T> implements Producer<T> {
 			throw new PoolException("Unable to add message to the pool as the pool does not exist", e);
 		}
 	}
-	
 }
