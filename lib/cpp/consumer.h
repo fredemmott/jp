@@ -63,6 +63,7 @@ namespace jp
 					while(true)
 					{
 						consume();
+						++i;
 					}
 				}
 				catch(EmptyPool e)

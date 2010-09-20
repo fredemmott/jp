@@ -21,7 +21,7 @@ public class TextConsumer extends uk.co.fredemmott.jp.consumers.TextConsumer {
 	}
 	
 	public static void main(String[] args) throws TTransportException {
-		Consumer<String> myConsumer = new TextConsumer("localhost", 1234, "text");
+		Consumer<String> myConsumer = new TextConsumer("localhost", 9090, "text");
 		myConsumer.run();
 	}
 }

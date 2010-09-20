@@ -24,9 +24,8 @@ module Jp
 					h
 				end
 				return c.options
-				break
 			end
-			raise 'No config file found.'
 		end
+		raise 'No config file found.'
 	end
 end

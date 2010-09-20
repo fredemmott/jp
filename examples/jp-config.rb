@@ -24,7 +24,7 @@ class JpConfig
 	end
 
 	def port_number
-		1234
+		9090
 	end
 
 	def mongo_uri
