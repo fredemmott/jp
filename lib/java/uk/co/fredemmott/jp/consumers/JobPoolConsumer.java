@@ -2,6 +2,8 @@ package uk.co.fredemmott.jp.consumers;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.fredemmott.jp.ClientFactory;
 import uk.co.fredemmott.jp.Consumer;
@@ -11,6 +13,7 @@ import uk.co.fredemmott.jp.JobPool;
 import uk.co.fredemmott.jp.NoSuchPool;
 
 public abstract class JobPoolConsumer<T> implements Consumer<T> {
+	private static final Logger logger = LoggerFactory.getLogger(JobPoolConsumer.class);
 	private static final long POLL_INTERVAL = 1;
 	private final JobPool.Iface client;
 	private final String pool;
@@ -28,11 +31,11 @@ public abstract class JobPoolConsumer<T> implements Consumer<T> {
 				poll();
 			} catch (NoSuchPool e) {
 				// Log problem and return
-				System.out.println("No such pool: " + pool);
+				logger.error("No such pool: " + pool, e);
 				return;
 			} catch (TException e) {
 				// Log problem and return
-				System.out.println("Error connecting to queue.");
+				logger.error("Error connecting to queue.", e);
 				return;
 			}
 			
