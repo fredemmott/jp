@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby1.9
+# Requires:
+# - Thrift
+
+host = ARGV[0] || 'localhost'
+port = ARGV[1].to_i || 9090
+
+##### Thrift setup #####
+
+$LOAD_PATH.push File.dirname($0) + '/gen-rb/'
+require 'job_pool_instrumented'
+
+include Jp
+
+transport = Thrift::BufferedTransport.new(Thrift::Socket.new(host, port))
+client = JobPoolInstrumented::Client.new(Thrift::BinaryProtocol.new(transport))
+transport.open
+
+##### Our code #####
+
+# We're connected, get the stats
+start_time = client.start_time
+seconds    = (Time.new - Time.at(start_time)).to_i
+pools      = client.pools
+
+added      = Hash.new(0)
+acquired   = Hash.new(0)
+empty      = Hash.new(0)
+purged     = Hash.new(0)
+
+pools.each do |pool|
+	added[pool]    = client.add_count pool
+	acquired[pool] = client.acquire_count pool
+	empty[pool]    = client.empty_count pool
+	purged[pool]   = client.purge_count pool
+
+	added[:total]    += added[pool]
+	acquired[:total] += acquired[pool]
+	empty[:total]    += empty[pool]
+	purged[:total]   += purged[pool]
+end
+print <<EOF
+running_since:  #{start_time} (#{Time.at start_time})
+running_for:    #{seconds} seconds
+pools:          #{pools.size}
+total added:    #{added[:total]}
+total acquired: #{acquired[:total]}
+total empty:    #{empty[:total]}
+total purged:   #{purged[:total]}
+EOF
