@@ -1,29 +1,41 @@
 #!/usr/bin/env ruby
 # Find a config file and load it
 module Jp
-	def self.load_config
-		# Where we look for config files
+	def self.load_server_config
+		load config_file 'jp-config'
+		c = JpConfig.new
+		def c.options
+			m = self.public_methods - Object.public_methods - [:options]
+			h = Hash.new
+			m.each do |method|
+				h[method] = self.send method
+			end
+			h
+		end
+		c.options
+	end
+
+	def self.load_mapper_config
+		load config_file 'jp-mapper-config'
+		JpMapperConfig.new
+	end
+
+	private
+	def self.config_file name
+		if ARGV[0] && File.exists?(ARGV[0])
+			return File.expand_path ARGV[0]
+		end
+
+		# Prefixes
 		[
-			ARGV[0],
-			'./jp-config.rb',
-			'~/jp-config.rb',
-			'~/.jp-config.rb',
-			'/etc/jp-config.rb',
-		].each do |path|
-			next unless path
-			full = File.expand_path path
+			'./',
+			'~/',
+			'~/.',
+			'/etc/',
+		].each do |prefix|
+			full = File.expand_path "%s%s.rb" % [prefix, name]
 			if File.exists? full
-				load full
-				c = JpConfig.new
-				def c.options
-					m = self.public_methods - Object.public_methods - [:options]
-					h = Hash.new
-					m.each do |method|
-						h[method] = self.send method
-					end
-					h
-				end
-				return c.options
+				return full
 			end
 		end
 		raise 'No config file found.'

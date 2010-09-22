@@ -3,7 +3,7 @@ $LOAD_PATH.push File.dirname(__FILE__)
 $LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
 
 require 'jp_config_loader'
-require 'jp_unlocker'
+require 'jp_mapper'
 
-s = JpUnlocker.new Jp::load_server_config
-s.run
+s = JpMapper.new Jp::load_mapper_config
+s.serve

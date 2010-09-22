@@ -5,5 +5,5 @@ $LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
 require 'jp_config_loader'
 require 'jp_instrumented_server'
 
-s = JpInstrumentedServer.new Jp::load_config
+s = JpInstrumentedServer.new Jp::load_server_config
 s.serve
