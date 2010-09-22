@@ -6,7 +6,7 @@ module Jp
 	def self.stats host, port
 		##### Thrift setup #####
 
-		$LOAD_PATH.push File.dirname($0) + '/../gen-rb/'
+		$LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 		require 'job_pool_instrumented'
 
 		transport = Thrift::BufferedTransport.new(Thrift::Socket.new(host, port))
