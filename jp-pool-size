@@ -20,19 +20,5 @@ connection = Mongo::Connection.from_uri options[:mongo_uri]
 database = connection.db options[:mongo_db]
 options[:pools].each do |name, data|
 	next if ARGV[0] && ARGV[0] != name
-	pool = database[name]
-
-	total     = pool.count
-	available = pool.find(locked: false).count
-	acquired  = total - available
-
-	unless ARGV[0]
-		print ("#" * (12 + name.size)) + "\n"
-		print "##### %s #####\n" % name
-		print ("#" * (12 + name.size)) + "\n"
-	end
-
-	print "Total:     %d\n" % total
-	print "Acquired:  %d\n" % acquired
-	print "Available: %d\n" % available
+	print "%s: %d\n" % [name, database[name].count]
 end
