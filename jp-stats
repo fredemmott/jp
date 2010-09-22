@@ -2,8 +2,9 @@
 # Requires:
 # - Thrift
 
-host = ARGV[0] || 'localhost'
-port = ARGV[1].to_i || 9090
+target = ARGV[0]
+target ||= 'localhost:9090'
+host, port = target.split(':')
 
 ##### Thrift setup #####
 
@@ -40,11 +41,24 @@ pools.each do |pool|
 	purged[:total]   += purged[pool]
 end
 print <<EOF
-running_since:  #{start_time} (#{Time.at start_time})
-running_for:    #{seconds} seconds
-pools:          #{pools.size}
-total added:    #{added[:total]}
-total acquired: #{acquired[:total]}
-total empty:    #{empty[:total]}
-total purged:   #{purged[:total]}
+#################
+##### TOTAL #####
+#################
+running_since: #{start_time} (#{Time.at start_time})
+running_for:   #{seconds} seconds
+pools:         #{pools.size}
+added:         #{added[:total]} (#{added[:total].to_f / seconds}/s)
+acquired:      #{acquired[:total]} (#{acquired[:total].to_f / seconds}/s)
+empty:         #{empty[:total]} (#{empty[:total].to_f / seconds}/s)
+purged:        #{purged[:total]} (#{purged[:total].to_f / seconds}/s)
 EOF
+
+pools.each do |pool|
+	print ("#" * (12 + pool.length)) + "\n"
+	print "##### %s #####\n" % pool
+	print ("#" * (12 + pool.length)) + "\n"
+	print "added:    %d (%f/s)\n" % [added[pool], added[pool].to_f / seconds]
+	print "acquired: %d (%f/s)\n" % [acquired[pool], acquired[pool].to_f / seconds]
+	print "empty:    %d (%f/s)\n" % [empty[pool], empty[pool].to_f / seconds]
+	print "purged:   %d (%f/s)\n" % [purged[pool], purged[pool].to_f / seconds]
+end
