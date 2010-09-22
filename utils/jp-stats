@@ -8,7 +8,7 @@ host, port = target.split(':')
 
 ##### Thrift setup #####
 
-$LOAD_PATH.push File.dirname($0) + '/gen-rb/'
+$LOAD_PATH.push File.dirname($0) + '/../gen-rb/'
 require 'job_pool_instrumented'
 
 include Jp

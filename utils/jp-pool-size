@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.push File.dirname(__FILE__)
-$LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
+$LOAD_PATH.push File.dirname(__FILE__) + '/../classes/'
 
 require 'ruby-1.9.0-compat'
 require 'jp_config_loader'
