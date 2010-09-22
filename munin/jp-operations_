@@ -14,8 +14,11 @@ graph_title Operations
 graph_vlabel number of operations
 graph_category Jp
 added.label Items added
+added.type counter
 acquired.label Items acquired (started)
+acquired.type counter
 purged.label Items purged (completed/removed)
+purged.type counter
 EOF
 	exit
 end
