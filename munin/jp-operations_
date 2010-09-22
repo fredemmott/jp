@@ -10,7 +10,7 @@ port = port.to_i
 if ARGV[0] == 'config' then
 print <<EOF
 graph_args -l 0
-graph_title Operations in '#{pool}' pool
+graph_title Operations
 graph_vlabel number of operations
 graph_category Jp
 added.label Items added
