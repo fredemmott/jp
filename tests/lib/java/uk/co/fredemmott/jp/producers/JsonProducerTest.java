@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import org.apache.thrift.transport.TTransportException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +20,8 @@ import uk.co.fredemmott.jp.ClientFactory;
 import uk.co.fredemmott.jp.Producer;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextProducerTest {
-	private static final String TEST_MESSAGE = "Test Message";
+public class JsonProducerTest {
+	private static final String TEST_MESSAGE = "{\"message\":\"test message\"}";
 
 	@Mock private ClientFactory mockFactory;
 	
@@ -42,16 +44,16 @@ public class TextProducerTest {
 	@Test
 	public void testTextProducer() throws TTransportException {
 		@SuppressWarnings("unused")
-		Producer<String> consumer = new TextProducer(HOSTNAME, PORT, POOL);
+		Producer<JSONObject> consumer = new JsonProducer(HOSTNAME, PORT, POOL);
 		
 		verify(mockFactory).createClient(HOSTNAME, PORT);
 	}
 
 	@Test
-	public void testSerialise() throws TTransportException {
-		Producer<String> consumer = new TextProducer(HOSTNAME, PORT, POOL);
+	public void testSerialise() throws TTransportException, JSONException {
+		Producer<JSONObject> consumer = new JsonProducer(HOSTNAME, PORT, POOL);
 		
-		ByteBuffer bytes = consumer.serialise(TEST_MESSAGE);
+		ByteBuffer bytes = consumer.serialise(new JSONObject(TEST_MESSAGE));
 		
 		assertEquals(utf8.encode(TEST_MESSAGE), bytes);
 	}
