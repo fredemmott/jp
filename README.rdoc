@@ -145,6 +145,12 @@ download one of the tarballs from http://www.mongodb.org/downloads, then:
  mkdir /var/tmp/mongodata
  bin/mongod --dbpath /var/tmp/mongodata
 
+There are also packages for various distributions linked from the bottom
+of that page; use them in preference to the version included in your
+distribution. For example, the 'mongodb' version in Ubuntu at the time of
+writing doesn't support the find_and_modify operation (too old), however
+mongodb-stable from the repositories listed on the mongodb site does.
+
 == Build/generate the Thrift bindings
 
 To build all the generated components, run:
