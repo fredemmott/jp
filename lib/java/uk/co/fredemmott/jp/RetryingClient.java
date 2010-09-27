@@ -21,7 +21,7 @@ public class RetryingClient implements JobPool.Iface {
 
 	private final Logger logger = LoggerFactory.getLogger(RetryingClient.class);
 	
-	private static final int MAX_CONNECT_ATTEMPTS = 5;
+	private static final int MAX_CONNECT_ATTEMPTS = 10;
 	private static final int MAX_FAIL_ATTEMPTS = 2;
 
 	private static final double RETRY_WAIT_GROWTH_CONSTANT = 0.5;
@@ -55,10 +55,14 @@ public class RetryingClient implements JobPool.Iface {
 		int attempt = 0;
 		while (attempt < MAX_CONNECT_ATTEMPTS) {
 			// Wait before the next attempt
-			try {
-				this.wait(retryWait(attempt));
-			} catch (InterruptedException e1) {
-				// Been woke up, carry on!
+			long timeToWait = retryWait(attempt);
+			if (timeToWait > 0) {
+				logger.info("Waiting {} milliseconds before trying to connect again", timeToWait);
+				try {
+					Thread.sleep(timeToWait);
+				} catch (InterruptedException e1) {
+					// Been woke up, carry on!
+				}
 			}
 				
 			// Is transport is already connected?
@@ -148,6 +152,9 @@ public class RetryingClient implements JobPool.Iface {
 				throw e;
 				}
 			}
+			
+			// Successfully added
+			return;
 		}
 	}
 
@@ -174,6 +181,8 @@ public class RetryingClient implements JobPool.Iface {
 				throw e;
 				}
 			}
+			// Successfully purged
+			return;
 		}
 	}
 
