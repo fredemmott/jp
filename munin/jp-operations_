@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# Usage:
+#  Symlink as 'jp-pool-size_portNumber'
+
+port = File.basename($0)
+port[File.basename(File.readlink($0))] = ''
+port = port.to_i
+
+if ARGV[0] == 'config' then
+print <<EOF
+graph_args -l 0
+graph_title Operations
+graph_vlabel number of operations
+graph_category Jp
+added.label Items added
+added.type counter
+acquired.label Items acquired (started)
+acquired.type counter
+purged.label Items purged (completed/removed)
+purged.type counter
+EOF
+	exit
+end
+
+$LOAD_PATH.push File.dirname(File.readlink($0)) + '/../utils/'
+require 'jp-stats'
+stats = Jp.stats('localhost', port)
+print <<EOF
+added.value #{stats[:added][:total]}
+acquired.value #{stats[:acquired][:total]}
+purged.value #{stats[:purged][:total]}
+EOF

@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+# Usage:
+#  Symlink as 'jp-pool-size_poolName'
+
+pool=File.basename($0)
+pool[File.basename(File.readlink($0))] = ''
+
+if ARGV[0] == 'config' then
+print <<EOF
+graph_args -l 0
+graph_title Jobs in '#{pool}' pool
+graph_vlabel number of jobs
+graph_category Jp
+jobs.label jobs in '#{pool}' pool
+EOF
+	exit
+end
+
+$LOAD_PATH.push File.dirname(File.readlink($0)) + '/../utils/'
+require 'jp-pool-size'
+print "jobs.value %d\n" % Jp.pool_sizes[pool]
