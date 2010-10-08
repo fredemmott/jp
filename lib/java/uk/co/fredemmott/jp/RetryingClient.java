@@ -34,7 +34,7 @@ public class RetryingClient implements JobPool.Iface {
 		transport = new TSocket(hostname, port);
 		TProtocol protocol = new TBinaryProtocol(transport);
 		client = new JobPool.Client(protocol);
-
+		
 		connectTransport();
 	}
 	
@@ -49,7 +49,11 @@ public class RetryingClient implements JobPool.Iface {
 		logger.info("Trying to connect Thrift transport");
 		
 		// Make sure it's closed first.
-		transport.close();
+		if (transport.isOpen()) {
+			return true;
+		} else {
+			transport.close();
+		}
 		
 		// Try and connect until we've run out of attempts
 		int attempt = 0;
@@ -112,6 +116,8 @@ public class RetryingClient implements JobPool.Iface {
 				return client.acquire(pool);
 			} catch (TException e) {
 				// Error running the request, try reconnecting
+				logger.info("Error acquiring message, trying to reconnect.", e);
+				// Error running the request, try reconnecting
 				if (attempt > MAX_FAIL_ATTEMPTS){
 					// Too many attempts
 					logger.error("Too many attempts, throwing exception");
@@ -138,6 +144,7 @@ public class RetryingClient implements JobPool.Iface {
 				client.add(pool, message);
 			} catch (TException e) {
 				// Error running the request, try reconnecting
+				logger.info("Error adding message, trying to reconnect.", e);
 				if (attempt > MAX_FAIL_ATTEMPTS){
 					// Too many attempts
 					logger.error("Too many attempts, throwing exception");
@@ -167,6 +174,7 @@ public class RetryingClient implements JobPool.Iface {
 				client.purge(pool, id);
 			} catch (TException e) {
 				// Error running the request, try reconnecting
+				logger.info("Error purging message, trying to reconnect.", e);
 				if (attempt > MAX_FAIL_ATTEMPTS){
 					// Too many attempts
 					logger.error("Too many attempts, throwing exception");
@@ -185,5 +193,4 @@ public class RetryingClient implements JobPool.Iface {
 			return;
 		}
 	}
-
 }
