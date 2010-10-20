@@ -13,6 +13,8 @@ class JpServer
 		options[:default_timeout] ||= 3600 # 1 hour
 		options[:port_number] ||= 9090
 		options[:mongo_uri] ||= 'mongodb://localhost'
+		options[:mongo_pool_size] ||= 10
+		options[:mongo_pool_timeout] ||= 60
 		raise ArgumentError.new "mongo_db option must be specified" unless options[:mongo_db]
 		raise ArgumentError.new "pools option must be specified" unless options[:pools]
 		raise ArgumentError.new "pools option must not be empty" unless ! options[:pools].empty?
@@ -33,7 +35,7 @@ class JpServer
 		if options.member? :injected_mongo_database then
 			@database = options[:injected_mongo_database]
 		else
-			connection = Mongo::Connection.from_uri options[:mongo_uri]
+			connection = Mongo::Connection.from_uri options[:mongo_uri], {:pool_size => options[:mongo_pool_size], :timeout => options[:mongo_pool_timeout]}
 			@database = connection.db options[:mongo_db]
 		end
 
