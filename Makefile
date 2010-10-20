@@ -38,8 +38,8 @@ THRIFT_JAR=/usr/share/java/libthrift.jar
 SLF4J_JAR=/usr/share/java/slf4j-api.jar
 gen-java/jp.jar: gen-java/uk/co/fredemmott/jp/JobPool.java
 	cd gen-java; \
-		find -name "*.java" | xargs javac -cp $(THRIFT_JAR):$(SLF4J_JAR); \
-		find -name "*.class" | xargs jar cvf jp.jar;
+		find . -name "*.java" | xargs javac -cp $(THRIFT_JAR):$(SLF4J_JAR); \
+		find . -name "*.class" | xargs jar cvf jp.jar;
 
 ##### LIB-JAVA #####
 
