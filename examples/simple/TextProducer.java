@@ -16,7 +16,7 @@ public class TextProducer {
 		Producer<String> producer = new uk.co.fredemmott.jp.producers.TextProducer("localhost", 9090, "text");
 		
 		// Add 100 messages to the pool
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<100000000; i++) {
 			try {
 				producer.add("test message " + i);
 			} catch (PoolException e) {

@@ -15,6 +15,8 @@ class JpServer
 		options[:mongo_uri] ||= 'mongodb://localhost'
 		options[:mongo_pool_size] ||= 10
 		options[:mongo_pool_timeout] ||= 60
+		options[:mongo_retry_attempts] ||= 10
+		options[:mongo_retry_delay] ||=1
 		raise ArgumentError.new "mongo_db option must be specified" unless options[:mongo_db]
 		raise ArgumentError.new "pools option must be specified" unless options[:pools]
 		raise ArgumentError.new "pools option must not be empty" unless ! options[:pools].empty?
@@ -54,6 +56,9 @@ class JpServer
 				@unlocker = JpUnlocker.new options
 			end
 		end
+
+		@retry_attempts = options[:mongo_retry_attempts]
+		@retry_delay = options[:mongo_retry_delay]
 	end
 
 	def serve
@@ -68,6 +73,23 @@ class JpServer
 		@server.serve
 		unlocker_thread.join if unlocker_thread
 	end
+
+	# Ensure retry upon failure
+	# Based on code from http://www.mongodb.org/display/DOCS/Replica+Pairs+in+Ruby
+	def rescue_connection_failure
+		success = false
+		retries = 0
+		while !success
+			begin
+				yield
+				success = true
+			rescue Mongo::ConnectionFailure => ex
+				retries += 1
+				raise ex if retries >= @retry_attempts
+				sleep(@retry_delay)
+			end
+    		end
+  	end
 	
 	def add pool, message
 		raise NoSuchPool.new unless @pools.member? pool
@@ -76,25 +98,30 @@ class JpServer
 			'message'      => message,
 			'locked'       => false,
 		}
-
-		@database[pool].insert doc
+		
+		rescue_connection_failure do
+			@database[pool].insert doc
+		end
 	end
 
 	def acquire pool
 		raise NoSuchPool.new unless @pools.member? pool
 		now = Time.new.to_i
+		doc = {}
 		begin
-			doc = @database[pool].find_and_modify(
-				query: {
-					'locked' => false
-				},
-				update: {
-					'$set' => {
-						'locked'       => now,
-						'locked_until' => now + @pools[pool][:timeout],
+			rescue_connection_failure do
+				doc = @database[pool].find_and_modify(
+					query: {
+						'locked' => false
 					},
-				}
-			)
+					update: {
+						'$set' => {
+							'locked'       => now,
+							'locked_until' => now + @pools[pool][:timeout],
+						},
+					}
+				)
+			end
 		rescue Mongo::OperationFailure => e
 			raise EmptyPool
 		end
@@ -106,6 +133,8 @@ class JpServer
 
 	def purge pool, id
 		raise NoSuchPool.new unless @pools.member? pool
-		@database[pool].remove _id: BSON::ObjectId(id)
+		rescue_connection_failure do
+			@database[pool].remove _id: BSON::ObjectId(id)
+		end
 	end
 end
