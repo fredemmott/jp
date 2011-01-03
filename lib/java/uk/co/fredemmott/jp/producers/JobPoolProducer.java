@@ -9,6 +9,13 @@ import uk.co.fredemmott.jp.NoSuchPool;
 import uk.co.fredemmott.jp.PoolException;
 import uk.co.fredemmott.jp.Producer;
 
+/**
+ * @author danharvey42@gmail.com
+ *
+ * @param <T> The type of object that will be serialised for the message
+ * 
+ * This class is thread-safe with all of it's methods.
+ */
 public abstract class JobPoolProducer<T> implements Producer<T> {
 	private JobPool.Iface client;
 	private String pool;
@@ -19,7 +26,7 @@ public abstract class JobPoolProducer<T> implements Producer<T> {
 	}
 	
 	@Override
-	public void add(T message) throws PoolException {
+	public synchronized void add(T message) throws PoolException {
 		try {
 			client.add(pool, serialise(message));
 		} catch (TException e) {
