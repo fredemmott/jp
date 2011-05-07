@@ -72,7 +72,12 @@ examples: thrift lib
 	$(MAKE) -C examples
 	ant compile_examples create_scripts
 
-clean:
+clean: clean-java clean-thrift
 	$(MAKE) -C examples clean
-	rm -rf gen-* lifecycle.png
+	rm -rf lifecycle.png
+
+clean-thrift:
+	rm -rf gen-*
+
+clean-java:
 	ant clean
