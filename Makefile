@@ -10,33 +10,38 @@ lib: lib-java
 
 ##### THRIFT-RB #####
 
-thrift-rb: gen-rb/job_pool.rb
+thrift-rb: gen-rb/jp_types.rb gen-rb/fb303_types.rb
 
-gen-rb/job_pool.rb: jp.thrift
+gen-rb/%_types.rb: if/%.thrift
 	thrift --gen rb $<
 
 ##### THRIFT-CPP #####
 
 thrift-cpp: gen-cpp/libjp.a
 
-gen-cpp/JobPool.cpp: jp.thrift
+gen-cpp/%_types.h: if/%.thrift
 	thrift --gen cpp $<
 
-gen-cpp/libjp.a: gen-cpp/JobPool.cpp
+gen-cpp/libjp.a: gen-cpp/jp_types.h gen-cpp/fb303_types.h
 	cd gen-cpp; \
-		$(CXX) $(CFLAGS) -c JobPool.cpp jp_constants.cpp jp_types.cpp -I/usr/include/thrift; \
+		$(CXX) $(CFLAGS) -c -I/usr/include/thrift \
+			JobPool.cpp jp_constants.cpp jp_types.cpp \
+			FacebookService.cpp fb303_constants.cpp fb303_types.cpp ;\
 		ar cq libjp.a *.o
 
 ###### THRIFT-JAVA #####
 
 thrift-java: gen-java/jp.jar
 
-gen-java/uk/co/fredemmott/jp/JobPool.java: jp.thrift
+gen-java/uk/co/fredemmott/jp/JobPool.java: if/jp.thrift
+	thrift --gen java $<
+
+gen-java/com/facebook/fb303/FacebookService.java: if/fb303.thrift
 	thrift --gen java $<
 
 THRIFT_JAR=/usr/share/java/libthrift.jar
 SLF4J_JAR=/usr/share/java/slf4j-api.jar
-gen-java/jp.jar: gen-java/uk/co/fredemmott/jp/JobPool.java
+gen-java/jp.jar: gen-java/uk/co/fredemmott/jp/JobPool.java gen-java/com/facebook/fb303/FacebookService.java
 	cd gen-java; \
 		find . -name "*.java" | xargs javac -cp $(THRIFT_JAR):$(SLF4J_JAR); \
 		find . -name "*.class" | xargs jar cvf jp.jar;

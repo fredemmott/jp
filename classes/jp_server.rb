@@ -59,6 +59,8 @@ class JpServer
 
 		@retry_attempts = options[:mongo_retry_attempts]
 		@retry_delay = options[:mongo_retry_delay]
+
+		@start_time = Time.new.to_i
 	end
 
 	def serve
@@ -88,15 +90,15 @@ class JpServer
 				raise ex if retries >= @retry_attempts
 				sleep(@retry_delay)
 			end
-    		end
-  	end
+				end
+		end
 	
 	def add pool, message
 		raise NoSuchPool.new unless @pools.member? pool
 
 		doc = {
-			'message'      => message,
-			'locked'       => false,
+			'message'			=> message,
+			'locked'			 => false,
 		}
 		
 		rescue_connection_failure do
@@ -116,7 +118,7 @@ class JpServer
 					},
 					update: {
 						'$set' => {
-							'locked'       => now,
+							'locked'			 => now,
 							'locked_until' => now + @pools[pool][:timeout],
 						},
 					}
@@ -137,4 +139,24 @@ class JpServer
 			@database[pool].remove _id: BSON::ObjectId(id)
 		end
 	end
+
+	# fb303:
+	def getName; 'jp'; end
+	def getVersion; '0.0.1'; end
+	def getStatus; Fb_status::ALIVE; end
+	def getStatusDetails; 'nothing to see here; move along'; end
+	def aliveSince; @start_time; end
+	def shutdown
+		STDERR.write "Shutdown requested via fb303\n"
+		exit
+	end
+	# fb303 stubs:
+	def setOption(key, value); end
+	def getOption(key); end
+	def getOptions; Hash.new; end
+	def getCpuProfile(seconds); String.new; end
+	def reinitialize; end
+	# fb303 stubs properly implemented in JpInstrumentedServer:
+	def getCounters; Hash.new; end
+	def getCounter(name); 0; end
 end

@@ -17,7 +17,7 @@ class JpInstrumentedServer < JpServer
 	# Readers
 
 	def start_time
-		@start_time
+		server.aliveSince
 	end
 
 	def pools
@@ -47,7 +47,6 @@ class JpInstrumentedServer < JpServer
 	# Data collectors
 
 	def serve
-		@start_time = Time.new.to_i
 		@server.serve
 	end
 
@@ -72,5 +71,16 @@ class JpInstrumentedServer < JpServer
 		result = @server.purge pool, id
 		@purge_count[pool] += 1
 		result
+	end
+
+	def getCounters
+		counters = Hash.new
+		pools.each do |pool|
+			counters["#{pool}.added"]    = add_count(pool)
+			counters["#{pool}.acquired"] = acquire_count(pool)
+			counters["#{pool}.empty"]    = empty_count(pool)
+			counters["#{pool}.purged"]   = purge_count(pool)
+		end
+		counters
 	end
 end

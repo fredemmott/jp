@@ -2,6 +2,8 @@ namespace rb Jp
 namespace cpp jp
 namespace java uk.co.fredemmott.jp
 
+include 'fb303.thrift'
+
 # Struct representing a job that's been acquired from a job pool
 struct Job
 {
@@ -19,7 +21,7 @@ exception NoSuchPool
 {
 }
 
-service JobPool
+service JobPool extends fb303.FacebookService
 {
 	##### USER API #####
 
