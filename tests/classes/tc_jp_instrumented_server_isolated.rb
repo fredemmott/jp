@@ -15,6 +15,11 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 		@jp = JpInstrumentedServer.new pools: {@test_pool => {}}, jp_server: @server
 	end
 
+  def test_start_time_delegates
+    @server.expects(:aliveSince).returns(1337)
+    assert_equal 1337, @jp.start_time
+  end
+
 	def test_pools
 		assert_equal [@test_pool], @jp.pools
 	end

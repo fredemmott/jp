@@ -17,7 +17,7 @@ class JpInstrumentedServer < JpServer
 	# Readers
 
 	def start_time
-		server.aliveSince
+		@server.aliveSince
 	end
 
 	def pools
