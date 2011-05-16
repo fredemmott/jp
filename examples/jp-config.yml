@@ -1,0 +1,14 @@
+pools:
+  text:
+    timeout: 60
+    cleanup_interval: 1
+  json:
+    timeout: 60
+    cleanup_interval: 1
+  thrift:
+    timeout: 60
+    cleanup_interval: 1
+skip_embedded_unlocker: false
+port_number: 9090
+mongo_uri: mongodb://localhost
+mongo_db: jp_examples
