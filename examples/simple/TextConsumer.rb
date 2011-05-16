@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push '../../lib/rb'
-require 'consumer'
+require 'jp/consumer'
 
 c = Jp::TextConsumer.new 'text' do |message|
 	print "I consumed a %s.\n" % message

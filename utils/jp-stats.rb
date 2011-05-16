@@ -1,13 +1,12 @@
-#!/usr/bin/env ruby1.9
+#!/usr/bin/env ruby
 # Requires:
 # - Thrift
+$LOAD_PATH.push File.dirname(__FILE__) + '/../lib/rb'
+require 'jp/thrift'
 
 module Jp
 	def self.stats host, port
 		##### Thrift setup #####
-
-		$LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
-		require 'job_pool_instrumented'
 
 		transport = Thrift::BufferedTransport.new(Thrift::Socket.new(host, port))
 		client = JobPoolInstrumented::Client.new(Thrift::BinaryProtocol.new(transport))

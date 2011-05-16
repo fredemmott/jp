@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push '../../lib/rb'
-require 'consumer'
+require 'jp/consumer'
 
 c = Jp::JsonConsumer.new 'json' do |message|
 	print "I consumed:\n%s\n" % message.inspect

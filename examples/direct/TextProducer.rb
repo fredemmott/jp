@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.push File.dirname(__FILE__) + '/../../gen-rb/'
-require 'job_pool'
+$LOAD_PATH.push File.dirname(__FILE__) + '/../../lib/rb/'
+require 'jp/thrift'
 include Jp
 
 socket = Thrift::Socket.new 'localhost', 9090

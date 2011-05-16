@@ -2,8 +2,9 @@
 
 require 'jp/client'
 
-autoload :Rev, 'rev'
+require 'rev'
 autoload :JSON, 'json'
+
 
 module Jp
 	class AbstractConsumer < AbstractClient

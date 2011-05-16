@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push '../../lib/rb/'
 $LOAD_PATH.push '../gen-rb/'
-require 'consumer'
+require 'jp/consumer'
 require 'example_types'
 
 c = Jp::ThriftConsumer.new 'thrift', ExampleData do |message|

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push '../../lib/rb'
-require 'producer'
+require 'jp/producer'
 
 p = Jp::JsonProducer.new 'json'
 doc = {
