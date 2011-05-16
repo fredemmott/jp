@@ -1,17 +1,18 @@
+require 'jp/thrift'
+require 'jp/server/mongo_connection'
+
 module Jp
   module Server
     # Implementation class.
     #
     # Does not include Thrift code, etc.
     class Handler
-      attr_reader :database, :pools, :retry_attempts, :retry_delay
+      include MongoConnection
+      attr_reader :pools, :retry_attempts, :retry_delay
       def initialize options = {}
         # Option defaults
         defaults = {
           :default_timeout      => 3600, # 1 hour
-          :mongo_uri            => 'mongodb://localhost',
-          :mongo_pool_size      => 10,
-          :mongo_pool_timeout   => 60,
           :mongo_retry_attempts => 10,
           :mongo_retry_delay    => 1,
         }
@@ -84,21 +85,6 @@ module Jp
         raise NoSuchPool.new unless pools.member? pool
         rescue_connection_failure do
           database[pool].remove _id: BSON::ObjectId(id)
-        end
-      end
-
-      private
-      def connect_to_mongo options
-        # Connect to mongodb
-        if options.member? :injected_mongo_database then
-          @database = options[:injected_mongo_database]
-        else
-          connection = Mongo::Connection.from_uri(
-            options[:mongo_uri],
-            :pool_size => options[:mongo_pool_size],
-            :timeout   => options[:mongo_pool_timeout],
-          )
-          @database = connection.db(options[:mongo_db])
         end
       end
 

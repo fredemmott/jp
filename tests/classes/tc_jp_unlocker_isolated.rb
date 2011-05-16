@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'jp_unlocker'
+require 'jp/server/unlocker'
 
 require 'test/unit'
 require 'mocha'
@@ -11,7 +11,7 @@ class TC_JpUnlocker_Isolated < Test::Unit::TestCase
 		@mongo.stubs(:[]).returns(mock)
 
 		@default_timeout = rand 1000
-		@unlocker = JpUnlocker.new(
+		@unlocker = Jp::Server::Unlocker.new(
 			{
 				:injected_mongo_database  => @mongo,
 				:default_timeout          => @default_timeout,

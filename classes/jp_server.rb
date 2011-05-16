@@ -2,7 +2,7 @@
 
 require 'jp/thrift'
 require 'jp/server/handler'
-require 'jp_unlocker'
+require 'jp/server/unlocker'
 require 'ruby-1.9.0-compat'
 
 require 'mongo'
@@ -30,7 +30,7 @@ class JpServer < Jp::Server::Handler
       if options.member? :injected_unlocker
         @unlocker = options[:injected_unlocker]
       else
-        @unlocker = JpUnlocker.new options
+        @unlocker = JpServer::Unlocker.new options
       end
     end
 
