@@ -31,14 +31,6 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 		@jp.serve
 	end
 
-	def test_start_time_from_serve_not_initialize
-		fake_time = Time.at(1337) # some time in 1970
-		Time.expects(:new).returns(fake_time)
-		@server.expects(:serve)
-		@jp.serve
-		assert_equal fake_time.to_i, @jp.start_time
-	end
-
 	def test_add
 		assert_equal 0, @jp.add_count(@test_pool)
 		@server.expects(:add).with(@test_pool,@test_message)
