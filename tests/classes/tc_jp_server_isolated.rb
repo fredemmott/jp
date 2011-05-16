@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-# Test JpServer with all external dependencies mocked
+# Test Jp::Server::Server with all external dependencies mocked
 # - doesn't require a mongodb server
 # - doesn't start the Thrift server
-require 'jp_server'
+require 'jp/server/server'
 
 require 'test/unit'
 require 'mocha'
@@ -20,7 +20,7 @@ class TC_JpServer_Isolated < Test::Unit::TestCase
 	end
 
 	def create_jp extra_options = {}
-		@jp = JpServer.new(
+		@jp = Jp::Server::Server.new(
 			{
 				:injected_thrift_server  => @thrift,
 				:injected_mongo_database => @mongo,

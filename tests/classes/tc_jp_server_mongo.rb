@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-# Test JpServer against the local mongo db server
+# Test Jp::Server::Server against the local mongo db server
 # - requires a running mongodb server
 # - doesn't start the Thrift server
-require 'jp_server'
+require 'jp/server/server'
 
 require 'mongo'
 
@@ -25,7 +25,7 @@ class TC_JpServer_Mongo < Test::Unit::TestCase
 
 		assert_equal 0, @pool.count, 'collection is empty before starting jp'
 
-		@jp = JpServer.new(
+		@jp = Jp::Server::Server.new(
 			{
 				:injected_thrift_server  => @thrift,
 				:injected_mongo_database => db,

@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push File.dirname(__FILE__)
-require 'jp_server'
-require 'job_pool_instrumented'
+require 'jp/server/server'
 
-class JpInstrumentedServer < JpServer
+class JpInstrumentedServer < Jp::Server::Server
 	def initialize options = {}
-		options[:jp_server] ||= JpServer.new options.merge(thrift_processor: JobPoolInstrumented::Processor.new(self))
+		options[:jp_server] ||= Jp::Server::Server.new options.merge(thrift_processor: JobPoolInstrumented::Processor.new(self))
 		@server = options[:jp_server]
 		@pools = options[:pools].keys
 		@add_count = Hash.new 0
