@@ -9,6 +9,9 @@ module Jp
           :mongo_pool_timeout   => 60,
         }
         options = defaults.merge(options)
+        unless options[:mongo_db]
+          raise ArgumentError.new "mongo_db option must be specified"
+        end
         # Connect to mongodb
         if options.member? :injected_mongo_database then
           @database = options[:injected_mongo_database]
