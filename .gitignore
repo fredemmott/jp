@@ -5,6 +5,7 @@ gen-*/
 *.project
 *.classpath
 *.class
+.rvmrc
 *~
 bin/*
 lib/java-build/*
