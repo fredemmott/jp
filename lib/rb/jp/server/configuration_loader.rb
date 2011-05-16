@@ -27,7 +27,6 @@ module Jp
             symbolize_hash v
           end
           if k.is_a? String
-            hash.delete k
             hash[k.to_sym] = v
           end
         end
