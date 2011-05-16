@@ -3,7 +3,6 @@
 require 'jp/thrift'
 require 'jp/server/handler'
 require 'jp/server/unlocker'
-require 'ruby-1.9.0-compat'
 
 require 'mongo'
 include Jp
