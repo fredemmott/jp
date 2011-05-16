@@ -18,9 +18,6 @@ module Jp
         }
         options = defaults.merge(options)
         # Sanity checks
-        unless options[:mongo_db]
-          raise ArgumentError.new "mongo_db option must be specified"
-        end
         unless options[:pools]
           raise ArgumentError.new "pools option must be specified"
         end
