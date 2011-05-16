@@ -16,6 +16,8 @@ class TC_JpServer_Mongo < Test::Unit::TestCase
 		@thrift = mock
 		@unlocker = mock
 
+		@default_timeout = rand 1000
+
 		conn = Mongo::Connection.new
 		db = conn.db('jp_autotest')
 		@pool = db['test_pool']
