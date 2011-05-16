@@ -2,7 +2,7 @@
 # Test Jp::Server::Server with all external dependencies mocked
 # - doesn't require a mongodb server
 # - doesn't start the Thrift server
-require 'jp_instrumented_server'
+require 'jp/server/instrumented_server'
 
 require 'test/unit'
 require 'mocha'
@@ -12,7 +12,7 @@ class TC_JpInstrumentedServer_Isolated < Test::Unit::TestCase
 		@server = mock
 		@test_pool = rand(10000).to_s
 		@test_message = rand(10000).to_s
-		@jp = JpInstrumentedServer.new pools: {@test_pool => {}}, jp_server: @server
+		@jp = Jp::Server::InstrumentedServer.new pools: {@test_pool => {}}, jp_server: @server
 	end
 
   def test_start_time_delegates

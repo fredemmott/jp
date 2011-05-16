@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.push File.dirname(__FILE__)
-$LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
 $LOAD_PATH.push File.dirname(__FILE__) + '/lib/rb/'
 
-require 'jp_instrumented_server'
 require 'jp/server/configuration_loader'
+require 'jp/server/instrumented_server'
 
 options = Jp::Server::ConfigurationLoader.server_config
 
-s = JpInstrumentedServer.new(options)
+s = Jp::Server::InstrumentedServer.new(options)
 s.serve
