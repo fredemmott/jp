@@ -30,7 +30,7 @@ class JpServer < Jp::Server::Handler
       if options.member? :injected_unlocker
         @unlocker = options[:injected_unlocker]
       else
-        @unlocker = JpServer::Unlocker.new options
+        @unlocker = Jp::Server::Unlocker.new options
       end
     end
 
