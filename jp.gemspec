@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.executables   = Dir['bin/*'].map{|x| File.basename(x)}
   s.require_paths = ['lib/rb']
   s.files         = Dir['bin/*'] + Dir['lib/rb/**/*']
-  s.has_rdoc      = false
 
   s.add_dependency 'thrift', '~> 0.6.0'
   s.add_dependency 'mongo',  '~> 1.3.1'
