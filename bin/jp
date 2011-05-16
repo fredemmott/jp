@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.push File.dirname(__FILE__)
-$LOAD_PATH.push File.dirname(__FILE__) + '/lib/rb/'
+$LOAD_PATH.push File.dirname(__FILE__) + '/../lib/rb/'
 
 require 'jp/server/configuration_loader'
 require 'jp/server/instrumented_server'
