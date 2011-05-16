@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../../gen-rb/'
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/./gen-rb/'
-require 'job_pool'
-require_relative './client.rb'
+require 'jp/client'
 
 autoload :Rev, 'rev'
 autoload :JSON, 'json'

@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 # Unlock pool entries that have been lcoked for longer than the timer
-require 'job_pool'
+require 'jp/thrift'
 require 'ruby-1.9.0-compat'
 
 require 'mongo'

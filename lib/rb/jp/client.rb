@@ -1,3 +1,5 @@
+require 'jp/thrift'
+
 module Jp
 	class AbstractClient
 		def initialize queue, options = {}

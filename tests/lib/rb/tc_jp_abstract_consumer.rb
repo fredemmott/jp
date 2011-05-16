@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
-require 'consumer'
+require 'jp/consumer'
 
+require 'rev'
 require 'test/unit'
 require 'mocha'
 
@@ -17,7 +18,7 @@ class TC_Jp_AbstractConsumer < Test::Unit::TestCase
 		@block = mock
 
 		@jp = mock
-		@c = Jp::AbstractConsumer.new @test_pool, client: @jp, poll_interval: @poll_interval { @block.call }
+		@c = Jp::AbstractConsumer.new(@test_pool, client: @jp, poll_interval: @poll_interval){ @block.call }
 	end
 
 	def test_run

@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.push File.dirname(__FILE__) + '/../gen-rb/'
 
+require 'jp/thrift'
 require 'jp_unlocker'
-require 'job_pool'
 require 'ruby-1.9.0-compat'
 
 require 'mongo'

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'producer'
+require 'jp/producer'
 
 require 'test/unit'
 require 'mocha'

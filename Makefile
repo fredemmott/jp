@@ -10,10 +10,10 @@ lib: lib-java
 
 ##### THRIFT-RB #####
 
-thrift-rb: gen-rb/jp_types.rb gen-rb/fb303_types.rb
+thrift-rb: lib/rb/jp/gen-rb/jp_types.rb lib/rb/jp/gen-rb/fb303_types.rb
 
-gen-rb/%_types.rb: if/%.thrift
-	thrift --gen rb $<
+lib/rb/jp/gen-rb/%_types.rb: if/%.thrift
+	thrift -o lib/rb/jp --gen rb $<
 
 ##### THRIFT-CPP #####
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'consumer'
+require 'jp/consumer'
 
 require 'test/unit'
 require 'mocha'
@@ -12,7 +12,7 @@ class TC_Jp_ThriftConsumer < Test::Unit::TestCase
 	def setup
 		@test_pool = rand(10000).to_s
 		@jp = mock
-		@c = Jp::ThriftConsumer.new @test_pool, ExampleData, client: @jp {}
+		@c = Jp::ThriftConsumer.new(@test_pool, ExampleData, client: @jp){}
 	end
 
 	def test_translate
