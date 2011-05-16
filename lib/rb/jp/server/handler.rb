@@ -1,5 +1,6 @@
 require 'jp/thrift'
 require 'jp/server/mongo_connection'
+require 'jp/server/pools'
 
 module Jp
   module Server
@@ -8,34 +9,21 @@ module Jp
     # Does not include Thrift code, etc.
     class Handler
       include MongoConnection
-      attr_reader :pools, :retry_attempts, :retry_delay
+      include Pools
+      attr_reader :retry_attempts, :retry_delay
       def initialize options = {}
         # Option defaults
         defaults = {
-          :default_timeout      => 3600, # 1 hour
           :mongo_retry_attempts => 10,
           :mongo_retry_delay    => 1,
         }
         options = defaults.merge(options)
-        # Sanity checks
-        unless options[:pools]
-          raise ArgumentError.new "pools option must be specified"
-        end
-        if options[:pools].empty?
-          raise ArgumentError.new "pools option must not be empty"
-        end
         # Copy with/deal with options
         @retry_attempts = options[:mongo_retry_attempts]
         @retry_delay    = options[:mongo_retry_delay]
 
-        @pools = Hash.new
-        options[:pools].each do |name, data|
-          data[:timeout]          ||= options[:default_timeout]
-          data[:cleanup_interval] ||= data[:timeout]
-          @pools[name] = data
-        end
-
-        connect_to_mongo options
+        load_pools(options)
+        connect_to_mongo(options)
       end
 
       def add pool, message

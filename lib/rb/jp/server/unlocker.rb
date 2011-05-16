@@ -1,6 +1,7 @@
 # Unlock pool entries that have been lcoked for longer than the timer
 require 'jp/thrift'
 require 'jp/server/mongo_connection'
+require 'jp/server/pools'
 
 require 'mongo'
 require 'rev'
@@ -9,18 +10,10 @@ module Jp
   module Server
     class Unlocker
       include MongoConnection
+      include Pools
     	def initialize options = {}
-    		options[:default_timeout] ||= 3600 # 1 hour
-    		raise ArgumentError.new "pools option must not be empty" unless ! options[:pools].empty?
-
-    		@pools = Hash.new
-    		options[:pools].each do |name, data|
-    			data[:timeout] ||= options[:default_timeout]
-    			data[:cleanup_interval] ||= data[:timeout]
-    			@pools[name] = data
-    		end
-
-        connect_to_mongo options
+        load_pools(options)
+        connect_to_mongo(options)
     	end
     
     	def clean pool_name
