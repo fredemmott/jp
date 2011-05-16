@@ -6,8 +6,6 @@ require 'ruby-1.9.0-compat'
 require 'mongo'
 require 'rev'
 
-autoload :Rev, 'rev'
-
 class JpUnlocker
 	def initialize options = {}
 		options[:default_timeout] ||= 3600 # 1 hour
