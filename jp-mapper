@@ -1,9 +1,0 @@
-#!/usr/bin/env ruby
-$LOAD_PATH.push File.dirname(__FILE__)
-$LOAD_PATH.push File.dirname(__FILE__) + '/classes/'
-
-require 'jp_config_loader'
-require 'jp_mapper'
-
-s = JpMapper.new Jp::load_mapper_config
-s.serve
