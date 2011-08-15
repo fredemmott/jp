@@ -84,7 +84,7 @@ module Jp
             success = true
           rescue Mongo::ConnectionFailure => ex
             retries += 1
-            raise ex if retries >= @retry_attempts
+            raise if retries >= @retry_attempts
             sleep(@retry_delay)
           end
         end
